@@ -1,11 +1,15 @@
-public class Boots implements Equipment{
+package equipment;
+
+import interfaces.Equipment;
+
+public class Gloves implements Equipment {
     private double strength;
     private double agility;
     private double expertise;
     private double resistance;
     private double health;
 
-    public Boots(double strength, double agility, double expertise, double resistance, double health) {
+    public Gloves(double strength, double agility, double expertise, double resistance, double health) {
         this.strength = strength;
         this.agility = agility;
         this.expertise = expertise;
@@ -37,4 +41,5 @@ public class Boots implements Equipment{
     public double getHealth() {
         return health;
     }
+
 }

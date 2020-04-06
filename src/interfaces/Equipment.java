@@ -1,3 +1,5 @@
+package interfaces;
+
 public interface Equipment {
     double getStrength();
     double getAgility();

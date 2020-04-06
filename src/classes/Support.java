@@ -1,7 +1,12 @@
-public class Support implements Class{
+package classes;
+
+import interfaces.Class;
+
+public class Support implements Class {
 
     private double attack;
     private double defense;
+    private double height;
 
     @Override
     public double getAttack() {
@@ -16,5 +21,10 @@ public class Support implements Class{
     @Override
     public double getPerformance() {
         return 0.3*attack + 0.8*defense;
+    }
+
+    @Override
+    public double getHeight() {
+        return height;
     }
 }

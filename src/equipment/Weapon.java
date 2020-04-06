@@ -1,17 +1,22 @@
-public class Gloves implements Equipment{
+package equipment;
+
+import interfaces.Equipment;
+
+public class Weapon implements Equipment {
     private double strength;
     private double agility;
     private double expertise;
     private double resistance;
     private double health;
 
-    public Gloves(double strength, double agility, double expertise, double resistance, double health) {
+    public Weapon(double strength, double agility, double expertise, double resistance, double health) {
         this.strength = strength;
         this.agility = agility;
         this.expertise = expertise;
         this.resistance = resistance;
         this.health = health;
     }
+
 
     @Override
     public double getStrength() {

@@ -1,4 +1,8 @@
-public class Chestplate implements Equipment{
+package equipment;
+
+import interfaces.Equipment;
+
+public class Chestplate implements Equipment {
     private double strength;
     private double agility;
     private double expertise;

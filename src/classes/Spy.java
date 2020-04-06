@@ -1,7 +1,11 @@
-public class Warrior implements Class {
+package classes;
+
+import interfaces.Class;
+
+public class Spy implements Class {
     private double attack;
     private double defense;
-
+    private double height;
 
     @Override
     public double getAttack() {
@@ -15,6 +19,11 @@ public class Warrior implements Class {
 
     @Override
     public double getPerformance() {
-        return 0.6*attack + 0.6*defense;
+        return 0.8*attack+0.3*defense;
+    }
+
+    @Override
+    public double getHeight() {
+        return height;
     }
 }
