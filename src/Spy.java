@@ -4,16 +4,16 @@ public class Spy implements Class {
 
     @Override
     public double getAttack() {
-        return 0;
+        return attack;
     }
 
     @Override
     public double getDefense() {
-        return 0;
+        return defense;
     }
 
     @Override
     public double getPerformance() {
-        return 0;
+        return 0.8*attack+0.3*defense;
     }
 }

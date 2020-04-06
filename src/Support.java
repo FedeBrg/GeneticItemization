@@ -5,16 +5,16 @@ public class Support implements Class{
 
     @Override
     public double getAttack() {
-        return 0;
+        return attack;
     }
 
     @Override
     public double getDefense() {
-        return 0;
+        return defense;
     }
 
     @Override
     public double getPerformance() {
-        return 0;
+        return 0.3*attack + 0.8*defense;
     }
 }

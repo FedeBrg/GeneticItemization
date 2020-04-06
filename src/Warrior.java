@@ -5,16 +5,16 @@ public class Warrior implements Class {
 
     @Override
     public double getAttack() {
-        return 0;
+        return attack;
     }
 
     @Override
     public double getDefense() {
-        return 0;
+        return defense;
     }
 
     @Override
     public double getPerformance() {
-        return 0;
+        return 0.6*attack + 0.6*defense;
     }
 }
