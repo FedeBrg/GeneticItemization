@@ -1,6 +1,7 @@
 package interfaces;
 
-public interface Equipment {
+public interface EquipmentOld {
+    int getId();
     double getStrength();
     double getAgility();
     double getExpertise();

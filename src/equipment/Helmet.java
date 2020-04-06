@@ -1,15 +1,17 @@
 package equipment;
 
-import interfaces.Equipment;
+import interfaces.EquipmentOld;
 
-public class Helmet implements Equipment {
+public class Helmet implements EquipmentOld {
+    private int id;
     private double strength;
     private double agility;
     private double expertise;
     private double resistance;
     private double health;
 
-    public Helmet(double strength, double agility, double expertise, double resistance, double health) {
+    public Helmet(int id, double strength, double agility, double expertise, double resistance, double health) {
+        this.id = id;
         this.strength = strength;
         this.agility = agility;
         this.expertise = expertise;
@@ -40,6 +42,11 @@ public class Helmet implements Equipment {
     @Override
     public double getHealth() {
         return health;
+    }
+
+    @Override
+    public int getId(){
+        return id;
     }
 
 }

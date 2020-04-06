@@ -1,15 +1,17 @@
 package equipment;
 
-import interfaces.Equipment;
+import interfaces.EquipmentOld;
 
-public class Chestplate implements Equipment {
+public class Chestplate implements EquipmentOld {
+    private int id;
     private double strength;
     private double agility;
     private double expertise;
     private double resistance;
     private double health;
 
-    public Chestplate(double strength, double agility, double expertise, double resistance, double health) {
+    public Chestplate(int id, double strength, double agility, double expertise, double resistance, double health) {
+        this.id = id;
         this.strength = strength;
         this.agility = agility;
         this.expertise = expertise;
@@ -40,5 +42,10 @@ public class Chestplate implements Equipment {
     @Override
     public double getHealth() {
         return health;
+    }
+
+    @Override
+    public int getId(){
+        return id;
     }
 }

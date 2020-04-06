@@ -1,8 +1,6 @@
 package equipment;
 
-import interfaces.EquipmentOld;
-
-public class Gloves implements EquipmentOld {
+public class Equipment {
     private int id;
     private double strength;
     private double agility;
@@ -10,7 +8,7 @@ public class Gloves implements EquipmentOld {
     private double resistance;
     private double health;
 
-    public Gloves(int id, double strength, double agility, double expertise, double resistance, double health) {
+    public Equipment(int id, double strength, double agility, double expertise, double resistance, double health) {
         this.id = id;
         this.strength = strength;
         this.agility = agility;
@@ -19,34 +17,28 @@ public class Gloves implements EquipmentOld {
         this.health = health;
     }
 
-    @Override
+    public int getId(){
+        return id;
+    }
+
     public double getStrength() {
         return strength;
     }
 
-    @Override
     public double getAgility() {
         return agility;
     }
 
-    @Override
     public double getExpertise() {
         return expertise;
     }
 
-    @Override
     public double getResistance() {
         return resistance;
     }
 
-    @Override
     public double getHealth() {
         return health;
-    }
-
-    @Override
-    public int getId(){
-        return id;
     }
 
 }
