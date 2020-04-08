@@ -1,6 +1,7 @@
 package implementations.selectors;
 
-import character.Character;
+import character.CharacterImpl;
+import interfaces.Character;
 import interfaces.Selector;
 import utilities.CharacterWithRelativePerformance;
 

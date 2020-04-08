@@ -1,24 +1,30 @@
 package character;
 
 import equipment.Equipment;
+import interfaces.Character;
 import interfaces.Class;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Character {
+public class CharacterImpl implements Character {
     private List<Equipment> equipment;
     private double attack;
     private double defense;
     private double height;
     private Class characterClass;
 
-    public Character(List<Equipment> equipment, Class characterClass, double height) {
+    public CharacterImpl(List<Equipment> equipment, Class characterClass, double height) {
         this.equipment = equipment;
         this.characterClass = characterClass;
         this.height = height;
 
         calculateAttack();
         calculateDefense();
+    }
+
+    public CharacterImpl(){
+        this.equipment = new ArrayList<>();
     }
 
     public double getAttack() {
@@ -33,6 +39,14 @@ public class Character {
 
     public double getHeight() {
         return height;
+    }
+
+    public Class getCharacterClass() {
+        return characterClass;
+    }
+
+    public void setCharacterClass(Class characterClass) {
+        this.characterClass = characterClass;
     }
 
     public void calculateAttack() {
@@ -79,6 +93,9 @@ public class Character {
 
     public void setEquipment(List<Equipment> equipment) {
         this.equipment = equipment;
+
+        calculateAttack();
+        calculateDefense();
     }
 
     public void setAttack(double attack) {

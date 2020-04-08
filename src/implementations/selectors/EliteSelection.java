@@ -1,7 +1,8 @@
 package implementations.selectors;
 
 import interfaces.Selector;
-import character.Character;
+import interfaces.Character;
+import character.CharacterImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
