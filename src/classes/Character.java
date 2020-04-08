@@ -5,31 +5,36 @@ import interfaces.Class;
 
 import java.util.List;
 
-public abstract class Character implements Class {
+public class Character {
     private List<Equipment> equipment;
     private double attack;
     private double defense;
     private double height;
+    private Class characterClass;
 
-    @Override
+    public Character(List<Equipment> equipment, Class characterClass, double height) {
+        this.equipment = equipment;
+        this.characterClass = characterClass;
+        this.height = height;
+
+        calculateAttack();
+        calculateDefense();
+    }
+
     public double getAttack() {
         return attack;
     }
 
-    @Override
     public double getDefense() {
         return defense;
     }
 
-    @Override
-    public double getPerformance(){ return 0; }
+    public double getPerformance(){ return characterClass.getPerformance(attack,defense); }
 
-    @Override
     public double getHeight() {
         return height;
     }
 
-    @Override
     public void calculateAttack() {
         double atm = 0.7 - Math.pow((3 * height - 5), 4) + Math.pow((3 * height - 5), 2) + height / 4;
         double s = 0, a = 0, e = 0;
@@ -47,7 +52,6 @@ public abstract class Character implements Class {
         attack = (a + e) * s * atm;
     }
 
-    @Override
     public void calculateDefense(){
         double dem = 1.9 + Math.pow((2.5 * height - 4.16), 4) - Math.pow((2.5 * height - 4.16), 2) - (3 * height) / 10;
         double e = 0, r = 0, h = 0;
@@ -65,38 +69,31 @@ public abstract class Character implements Class {
         defense = (r + e) * h * dem;
     }
 
-    @Override
     public void addEquipment(Equipment e){
         equipment.add(e);
     }
 
-    @Override
     public List<Equipment> getEquipment(){
         return equipment;
     }
 
-    @Override
     public void setEquipment(List<Equipment> equipment) {
         this.equipment = equipment;
     }
 
-    @Override
     public void setAttack(double attack) {
         this.attack = attack;
     }
 
-    @Override
     public void setDefense(double defense) {
         this.defense = defense;
     }
 
-    @Override
     public void setHeight(double height) {
         this.height = height;
     }
 
-    @Override
     public void printCharacter(){
-        System.out.printf("HEIGHT = %f, ATTACK = %f, DEFENSE = %f\n", height, attack, defense);
+        System.out.printf("HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f\n", height, attack, defense);
     }
 }

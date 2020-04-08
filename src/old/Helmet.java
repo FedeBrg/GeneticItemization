@@ -1,8 +1,8 @@
-package equipment;
+package old;
 
-import interfaces.EquipmentOld;
+import old.EquipmentOld;
 
-public class Chestplate implements EquipmentOld {
+public class Helmet implements EquipmentOld {
     private int id;
     private double strength;
     private double agility;
@@ -10,7 +10,7 @@ public class Chestplate implements EquipmentOld {
     private double resistance;
     private double health;
 
-    public Chestplate(int id, double strength, double agility, double expertise, double resistance, double health) {
+    public Helmet(int id, double strength, double agility, double expertise, double resistance, double health) {
         this.id = id;
         this.strength = strength;
         this.agility = agility;
@@ -48,4 +48,5 @@ public class Chestplate implements EquipmentOld {
     public int getId(){
         return id;
     }
+
 }

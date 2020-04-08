@@ -1,16 +1,12 @@
 package classes;
 
-import java.util.ArrayList;
+import interfaces.Class;
 
-public class Spy extends Character {
 
-    public Spy(){
-        setEquipment(new ArrayList<>());
-    }
-
+public class Spy implements Class {
     @Override
-    public double getPerformance() {
-        return 0.8 * getAttack() + 0.3 * getDefense();
+    public double getPerformance(double attack, double defense) {
+        return 0.8 * attack + 0.3 * defense;
     }
 
 }

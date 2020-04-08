@@ -1,4 +1,4 @@
-package interfaces;
+package old;
 
 public interface EquipmentOld {
     int getId();

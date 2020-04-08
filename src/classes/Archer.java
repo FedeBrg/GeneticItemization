@@ -1,16 +1,12 @@
 package classes;
 
-import java.util.ArrayList;
+import interfaces.Class;
 
-public class Archer extends Character {
-
-    public Archer(){
-        setEquipment(new ArrayList<>());
-    }
+public class Archer implements Class {
 
     @Override
-    public double getPerformance() {
-        return 0.9 * getAttack() + 0.1 * getDefense();
+    public double getPerformance(double attack, double defense) {
+        return 0.9 * attack + 0.1 * defense;
     }
 
 }
