@@ -110,7 +110,8 @@ public class CharacterImpl implements Character {
         this.height = height;
     }
 
+    @Override
     public void printCharacter(){
-        System.out.printf("HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f, PERFORMANCE = %.4f\n", height, attack, defense, getPerformance());
+        System.out.printf("HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f, PERFORMANCE = %f\n", height, attack, defense, getPerformance());
     }
 }

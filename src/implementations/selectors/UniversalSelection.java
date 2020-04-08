@@ -7,7 +7,8 @@ import utilities.CharacterWithRelativePerformance;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouletteSelection implements Selector {
+public class UniversalSelection implements Selector {
+    private int j = 0;
 
     @Override
     public List<Character> select(List<Character> population, int limit) {
@@ -25,7 +26,7 @@ public class RouletteSelection implements Selector {
 
         /* Ruleta time */
         for(int i = 0; i < limit; i++){
-            randomNumber = generateRandomNumber();
+            randomNumber = generateRandomNumber(limit);
             accumulatedPerformance = orderedList.get(0).getRelativePerformance();
 
             /* El caso base debe sacarse aparte */
@@ -44,25 +45,31 @@ public class RouletteSelection implements Selector {
 
                 toReturn.add(orderedList.get(index).getCharacter());
             }
+
+            j++;
         }
 
         return toReturn;
     }
 
-    /* Generar un numero random entre [0, 1) */
-    private double generateRandomNumber(){
+    /* Generar el numero random para Universal */
+    private double generateRandomNumber(int limit){
         double lower = 0;
         double upper = 1.0;
-        return Math.random() * (upper - lower) + lower;
+        double r = Math.random() * (upper - lower) + lower;
+
+        return (r + j)/limit;
     }
 
     /* Obtener la performance total */
     private double getTotalPerformance(List<Character> population){
         double toReturn = 0;
+
         for(Character c : population){
             toReturn += c.getPerformance();
         }
 
         return toReturn;
     }
+
 }

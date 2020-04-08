@@ -3,23 +3,56 @@ import implementations.selectors.EliteSelection;
 import implementations.selectors.RouletteSelection;
 import implementations.selectors.UniversalSelection;
 import interfaces.Class;
+import interfaces.RoleGame;
 import interfaces.Selector;
+import interfaces.Character;
 import utilities.Parser;
 import equipment.Equipment;
-import character.Character;
+import character.CharacterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RoleGame {
+public class RoleGameImpl implements RoleGame {
     private List<Equipment> weapons;
     private List<Equipment> boots;
     private List<Equipment> helmets;
     private List<Equipment> gloves;
     private List<Equipment> chestplates;
+    double pm;
 
-    public RoleGame() {
+    @Override
+    public List<Equipment> getWeapons() {
+        return weapons;
+    }
+
+    @Override
+    public List<Equipment> getBoots() {
+        return boots;
+    }
+
+    @Override
+    public List<Equipment> getHelmets() {
+        return helmets;
+    }
+
+    @Override
+    public List<Equipment> getGloves() {
+        return gloves;
+    }
+
+    @Override
+    public List<Equipment> getChestplates() {
+        return chestplates;
+    }
+
+    @Override
+    public double getPm() {
+        return pm;
+    }
+
+    public RoleGameImpl() {
         Parser p = new Parser();
 
         weapons = p.parseEquipmentFile("armas.tsv");
@@ -27,22 +60,15 @@ public class RoleGame {
         helmets = p.parseEquipmentFile("cascos.tsv");
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
+
+        pm = 0.3;
     }
 
     public static void main(String[] args){
-        RoleGame rg = new RoleGame();
+        RoleGameImpl rg = new RoleGameImpl();
         Selector s = new UniversalSelection();
 
         List<Character> chars = rg.randomGeneration(new Archer(),50);
-        System.out.println("INITIAL GENERATION\n");
-        for(Character c : chars){
-            c.printCharacter();
-        }
-
-        System.out.println("FINAL GENERATION");
-        for(Character c : s.select(chars, 10)){
-            c.printCharacter();
-        }
     }
 
     private double generateRandomHeight(){
@@ -69,13 +95,11 @@ public class RoleGame {
             equipment.add(helmets.get(r.nextInt(hmax)));
             equipment.add(gloves.get(r.nextInt(gmax)));
             equipment.add(chestplates.get(r.nextInt(cmax)));
-            characters.add(new Character(equipment,c,generateRandomHeight()));
+            characters.add(new CharacterImpl(equipment,c,generateRandomHeight()));
 
             equipment.clear();
         }
 
         return characters;
     }
-
-
 }
