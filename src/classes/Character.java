@@ -5,7 +5,7 @@ import interfaces.Class;
 
 import java.util.List;
 
-abstract class Character implements Class {
+public abstract class Character implements Class {
     private List<Equipment> equipment;
     private double attack;
     private double defense;
