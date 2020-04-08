@@ -1,28 +1,15 @@
 package classes;
 
-import interfaces.Class;
+import java.util.ArrayList;
 
-public class Warrior implements Class {
-    private double attack;
-    private double defense;
-    private double height;
+public class Warrior extends Character {
 
-
-    @Override
-    public double getAttack() {
-        return attack;
+    public Warrior(){
+        setEquipment(new ArrayList<>());
     }
 
-    @Override
-    public double getDefense() {
-        return defense;
-    }
-
-    @Override
     public double getPerformance() {
-        return 0.6*attack + 0.6*defense;
+        return 0.6 * getAttack() + 0.6 * getDefense();
     }
 
-    @Override
-    public double getHeight(){ return height; }
 }

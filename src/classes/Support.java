@@ -1,30 +1,16 @@
 package classes;
 
-import interfaces.Class;
+import java.util.ArrayList;
 
-public class Support implements Class {
+public class Support extends Character {
 
-    private double attack;
-    private double defense;
-    private double height;
-
-    @Override
-    public double getAttack() {
-        return attack;
-    }
-
-    @Override
-    public double getDefense() {
-        return defense;
+    public Support(){
+        setEquipment(new ArrayList<>());
     }
 
     @Override
     public double getPerformance() {
-        return 0.3*attack + 0.8*defense;
+        return 0.3 * getAttack() + 0.8 * getDefense();
     }
 
-    @Override
-    public double getHeight() {
-        return height;
-    }
 }

@@ -1,7 +1,6 @@
-package Utilities;
+package utilities;
 
 import equipment.Equipment;
-import interfaces.EquipmentOld;
 
 import java.io.File;
 import java.io.FileNotFoundException;
