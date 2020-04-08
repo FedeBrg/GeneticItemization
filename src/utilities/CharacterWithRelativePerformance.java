@@ -1,6 +1,6 @@
 package utilities;
 
-import classes.Character;
+import character.Character;
 
 public class CharacterWithRelativePerformance {
     private Character character;

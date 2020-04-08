@@ -1,4 +1,4 @@
-package classes;
+package character;
 
 import equipment.Equipment;
 import interfaces.Class;

@@ -1,11 +1,10 @@
 import classes.Archer;
 import implementations.selectors.EliteSelection;
-import implementations.selectors.RouletteSelection;
 import interfaces.Class;
 import interfaces.Selector;
 import utilities.Parser;
 import equipment.Equipment;
-import classes.Character;
+import character.Character;
 
 import java.util.ArrayList;
 import java.util.List;
