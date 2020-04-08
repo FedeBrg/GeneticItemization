@@ -27,15 +27,24 @@ public class RouletteSelection implements Selector {
         /* Ruleta time */
         for(int i = 0; i < limit; i++){
             randomNumber = generateRandomNumber();
-            index = 0;
-            accumulatedPerformance = 0;
+            accumulatedPerformance = orderedList.get(0).getRelativePerformance();
 
-            while(accumulatedPerformance < randomNumber){
-                accumulatedPerformance += orderedList.get(index).getRelativePerformance();
-                index++;
+            /* El caso base debe sacarse aparte */
+            if(accumulatedPerformance > randomNumber){
+                toReturn.add(orderedList.get(0).getCharacter());
             }
 
-            toReturn.add(orderedList.get(index).getCharacter());
+            /* El resto de los casos pueden resolverse con un while */
+            else {
+                index = 1;
+
+                while(accumulatedPerformance <= randomNumber && index < orderedList.size() - 1){
+                    accumulatedPerformance += orderedList.get(index).getRelativePerformance();
+                    index++;
+                }
+
+                toReturn.add(orderedList.get(index).getCharacter());
+            }
         }
 
         return toReturn;
