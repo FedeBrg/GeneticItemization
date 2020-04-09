@@ -72,8 +72,6 @@ public class RoleGameImpl implements RoleGame {
         Crossover cross = new SinglePointCrossover();
         List<Character> chars = rg.randomGeneration(new Archer(),100);
 
-        //chars.get(0).printCharacter();
-        //chars.get(1).printCharacter();
 
         System.out.println("INICIAL\n");
         for(Character c : chars){
@@ -84,11 +82,6 @@ public class RoleGameImpl implements RoleGame {
         for(Character cha : s.select(chars, 25)){
             cha.printCharacter();
         }
-
-        Map.Entry<Character,Character> entry = cross.cross(chars.get(0),chars.get(1));
-
-        //entry.getKey().printCharacter();
-        //entry.getValue().printCharacter();
 
     }
 
