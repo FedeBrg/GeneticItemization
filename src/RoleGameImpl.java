@@ -74,22 +74,7 @@ public class RoleGameImpl implements RoleGame {
         Selector s = new UniversalSelection();
         List<Character> chars = rg.randomGeneration(new Archer(),10);
 
-        Character c = chars.get(0);
 
-        c.printCharacter();
-
-        Mutation m = new UniformMultiGenMutation();
-        c = m.mutate(c,rg);
-        c.printCharacter();
-
-        c = m.mutate(c,rg);
-        c.printCharacter();
-
-        c = m.mutate(c,rg);
-        c.printCharacter();
-
-        c = m.mutate(c,rg);
-        c.printCharacter();
 
     }
 
