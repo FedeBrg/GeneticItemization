@@ -17,9 +17,7 @@ public class SelectorUtilities {
     }
 
     /* Generar un numero random entre [0, 1) */
-    public double generateRandomNumber(){
-        double lower = 0;
-        double upper = 1.0;
+    public double generateRandomNumber(double lower, double upper){
         return Math.random() * (upper - lower) + lower;
     }
 

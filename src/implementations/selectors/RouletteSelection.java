@@ -3,6 +3,7 @@ package implementations.selectors;
 import interfaces.Character;
 import interfaces.Selector;
 import utilities.CharacterWithRelativePerformance;
+import utilities.SelectorUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class RouletteSelection implements Selector {
         /* Las cosas que necesitamos */
         double randomNumber, accumulatedPerformance, totalPerformance = getTotalPerformance(population);
         int index;
+        SelectorUtilities su = new SelectorUtilities();
         List<CharacterWithRelativePerformance> orderedList = new ArrayList<>();
         List<Character> toReturn = new ArrayList<>();
 
@@ -25,7 +27,7 @@ public class RouletteSelection implements Selector {
 
         /* Ruleta time */
         for(int i = 0; i < limit; i++){
-            randomNumber = generateRandomNumber();
+            randomNumber = su.generateRandomNumber(0, 1);
             accumulatedPerformance = orderedList.get(0).getRelativePerformance();
 
             /* El caso base debe sacarse aparte */
@@ -47,13 +49,6 @@ public class RouletteSelection implements Selector {
         }
 
         return toReturn;
-    }
-
-    /* Generar un numero random entre [0, 1) */
-    private double generateRandomNumber(){
-        double lower = 0;
-        double upper = 1.0;
-        return Math.random() * (upper - lower) + lower;
     }
 
     /* Obtener la performance total */

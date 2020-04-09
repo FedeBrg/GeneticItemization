@@ -43,7 +43,7 @@ public class RankingSelection implements Selector {
 
         /* Ruleta time */
         for(int i = 0; i < limit; i++){
-            randomNumber = su.generateRandomNumber();
+            randomNumber = su.generateRandomNumber(0, 1);
             accumulatedPerformance = orderedList.get(0).getRelativePerformance();
 
             /* El caso base debe sacarse aparte */

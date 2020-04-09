@@ -1,5 +1,7 @@
 import classes.Archer;
 import implementations.crossovers.SinglePointCrossover;
+import implementations.selectors.DeterministicTournamentSelection;
+import implementations.selectors.ProbabilisticTournamentSelection;
 import implementations.selectors.RankingSelection;
 import interfaces.*;
 import implementations.selectors.UniversalSelection;
@@ -68,7 +70,7 @@ public class RoleGameImpl implements RoleGame {
 
     public static void main(String[] args){
         RoleGameImpl rg = new RoleGameImpl();
-        Selector s = new RankingSelection();
+        Selector s = new ProbabilisticTournamentSelection();
         Crossover cross = new SinglePointCrossover();
         List<Character> chars = rg.randomGeneration(new Archer(),100);
 
