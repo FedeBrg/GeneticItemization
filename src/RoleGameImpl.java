@@ -1,4 +1,7 @@
 import classes.Archer;
+import implementations.crossovers.SinglePointCrossover;
+import implementations.crossovers.TwoPointCrossover;
+import implementations.crossovers.UniformCrossover;
 import implementations.mutations.IndividualGenMutation;
 import implementations.mutations.MultiGenMutation;
 import implementations.mutations.UniformMultiGenMutation;
@@ -17,6 +20,7 @@ import character.CharacterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class RoleGameImpl implements RoleGame {
@@ -72,9 +76,16 @@ public class RoleGameImpl implements RoleGame {
     public static void main(String[] args){
         RoleGameImpl rg = new RoleGameImpl();
         Selector s = new UniversalSelection();
+        Crossover cross = new SinglePointCrossover();
         List<Character> chars = rg.randomGeneration(new Archer(),10);
 
+        chars.get(0).printCharacter();
+        chars.get(1).printCharacter();
 
+        Map.Entry<Character,Character> entry = cross.cross(chars.get(0),chars.get(1));
+
+        entry.getKey().printCharacter();
+        entry.getValue().printCharacter();
 
     }
 

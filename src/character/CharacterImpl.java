@@ -112,6 +112,8 @@ public class CharacterImpl implements Character {
 
     @Override
     public void printCharacter(){
-        System.out.printf("HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f, PERFORMANCE = %f\n", height, attack, defense, getPerformance());
+        System.out.printf("W:%d\tB:%d\tH:%d\tG:%d\tC:%d\n" +
+                "HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f, PERFORMANCE = %f\n",
+                equipment.get(0).getId(),equipment.get(1).getId(),equipment.get(2).getId(),equipment.get(3).getId(),equipment.get(4).getId(), height, attack, defense, getPerformance());
     }
 }

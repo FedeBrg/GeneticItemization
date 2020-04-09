@@ -2,13 +2,12 @@ package implementations.crossovers;
 
 import character.CharacterImpl;
 import equipment.Equipment;
-import interfaces.Crossover;
 import interfaces.Character;
+import interfaces.Crossover;
 
 import java.util.*;
 
-public class SinglePointCrossover implements Crossover {
-
+public class TwoPointCrossover implements Crossover {
 
     @Override
     public Map.Entry<Character, Character> cross(Character c1, Character c2) {
@@ -23,10 +22,15 @@ public class SinglePointCrossover implements Crossover {
         List<Equipment> e2 = new ArrayList<>();
 
         Random r = new Random();
-        int crossPoint = r.nextInt(7);
+        int r1 = r.nextInt(7);
+        int r2 = r.nextInt(7);
+
+        int crossPoint = Math.min(r1,r2);
+        int endPoint = Math.max(r1,r2);
+
 
         for(int i = 0; i < 5; i++){
-            if(i<crossPoint){
+            if(i<crossPoint || i>=endPoint){
                 e1.add(c1.getEquipment().get(i));
                 e2.add(c2.getEquipment().get(i));
             }
@@ -36,11 +40,11 @@ public class SinglePointCrossover implements Crossover {
             }
         }
 
-        if(crossPoint <= 5){
+        if(endPoint == 6){
             mutated1.setHeight(c2.getHeight());
             mutated2.setHeight(c1.getHeight());
         }
-        else if(crossPoint == 6){
+        else if(endPoint < 6){
             mutated1.setHeight(c1.getHeight());
             mutated2.setHeight(c2.getHeight());
         }
@@ -50,6 +54,5 @@ public class SinglePointCrossover implements Crossover {
 
         return new AbstractMap.SimpleEntry<>(mutated1,mutated2);
     }
-
 
 }
