@@ -1,19 +1,12 @@
 import classes.Archer;
 import implementations.crossovers.SinglePointCrossover;
-import implementations.crossovers.TwoPointCrossover;
-import implementations.crossovers.UniformCrossover;
-import implementations.mutations.IndividualGenMutation;
-import implementations.mutations.MultiGenMutation;
-import implementations.mutations.UniformMultiGenMutation;
-import implementations.selectors.EliteSelection;
+import implementations.selectors.RankingSelection;
 import interfaces.*;
-import implementations.selectors.RouletteSelection;
 import implementations.selectors.UniversalSelection;
 import interfaces.Class;
 import interfaces.RoleGame;
 import interfaces.Selector;
 import interfaces.Character;
-import interfaces.Class;
 import utilities.Parser;
 import equipment.Equipment;
 import character.CharacterImpl;
@@ -75,17 +68,27 @@ public class RoleGameImpl implements RoleGame {
 
     public static void main(String[] args){
         RoleGameImpl rg = new RoleGameImpl();
-        Selector s = new UniversalSelection();
+        Selector s = new RankingSelection();
         Crossover cross = new SinglePointCrossover();
-        List<Character> chars = rg.randomGeneration(new Archer(),10);
+        List<Character> chars = rg.randomGeneration(new Archer(),100);
 
-        chars.get(0).printCharacter();
-        chars.get(1).printCharacter();
+        //chars.get(0).printCharacter();
+        //chars.get(1).printCharacter();
+
+        System.out.println("INICIAL\n");
+        for(Character c : chars){
+            c.printCharacter();
+        }
+
+        System.out.println("FINAL\n");
+        for(Character cha : s.select(chars, 25)){
+            cha.printCharacter();
+        }
 
         Map.Entry<Character,Character> entry = cross.cross(chars.get(0),chars.get(1));
 
-        entry.getKey().printCharacter();
-        entry.getValue().printCharacter();
+        //entry.getKey().printCharacter();
+        //entry.getValue().printCharacter();
 
     }
 
