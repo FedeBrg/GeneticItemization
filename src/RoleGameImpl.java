@@ -1,4 +1,5 @@
 import classes.Archer;
+import implementations.crossovers.AnnularCrossover;
 import implementations.crossovers.SinglePointCrossover;
 import implementations.crossovers.TwoPointCrossover;
 import implementations.crossovers.UniformCrossover;
@@ -76,7 +77,7 @@ public class RoleGameImpl implements RoleGame {
     public static void main(String[] args){
         RoleGameImpl rg = new RoleGameImpl();
         Selector s = new UniversalSelection();
-        Crossover cross = new SinglePointCrossover();
+        Crossover cross = new AnnularCrossover();
         List<Character> chars = rg.randomGeneration(new Archer(),10);
 
         chars.get(0).printCharacter();

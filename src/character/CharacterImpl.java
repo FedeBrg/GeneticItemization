@@ -116,4 +116,6 @@ public class CharacterImpl implements Character {
                 "HEIGHT = %.4f,\t ATTACK = %.4f,\t DEFENSE = %.4f, PERFORMANCE = %f\n",
                 equipment.get(0).getId(),equipment.get(1).getId(),equipment.get(2).getId(),equipment.get(3).getId(),equipment.get(4).getId(), height, attack, defense, getPerformance());
     }
+
+
 }
