@@ -1,11 +1,16 @@
 import classes.Archer;
+import implementations.mutations.IndividualGenMutation;
+import implementations.mutations.MultiGenMutation;
+import implementations.mutations.UniformMultiGenMutation;
 import implementations.selectors.EliteSelection;
+import interfaces.*;
 import implementations.selectors.RouletteSelection;
 import implementations.selectors.UniversalSelection;
 import interfaces.Class;
 import interfaces.RoleGame;
 import interfaces.Selector;
 import interfaces.Character;
+import interfaces.Class;
 import utilities.Parser;
 import equipment.Equipment;
 import character.CharacterImpl;
@@ -67,8 +72,25 @@ public class RoleGameImpl implements RoleGame {
     public static void main(String[] args){
         RoleGameImpl rg = new RoleGameImpl();
         Selector s = new UniversalSelection();
+        List<Character> chars = rg.randomGeneration(new Archer(),10);
 
-        List<Character> chars = rg.randomGeneration(new Archer(),50);
+        Character c = chars.get(0);
+
+        c.printCharacter();
+
+        Mutation m = new UniformMultiGenMutation();
+        c = m.mutate(c,rg);
+        c.printCharacter();
+
+        c = m.mutate(c,rg);
+        c.printCharacter();
+
+        c = m.mutate(c,rg);
+        c.printCharacter();
+
+        c = m.mutate(c,rg);
+        c.printCharacter();
+
     }
 
     private double generateRandomHeight(){
@@ -79,7 +101,6 @@ public class RoleGameImpl implements RoleGame {
 
     private List<Character> randomGeneration(Class c, int size){
         List<Character> characters = new ArrayList<>(size);
-        List<Equipment> equipment = new ArrayList<>(5);
 
         Random r = new Random();
 
@@ -90,6 +111,7 @@ public class RoleGameImpl implements RoleGame {
         int cmax = chestplates.size();
 
         for (int i = 0; i < size; i++){
+            List<Equipment> equipment = new ArrayList<>(5);
             equipment.add(weapons.get(r.nextInt(wmax)));
             equipment.add(boots.get(r.nextInt(bmax)));
             equipment.add(helmets.get(r.nextInt(hmax)));
@@ -97,7 +119,6 @@ public class RoleGameImpl implements RoleGame {
             equipment.add(chestplates.get(r.nextInt(cmax)));
             characters.add(new CharacterImpl(equipment,c,generateRandomHeight()));
 
-            equipment.clear();
         }
 
         return characters;

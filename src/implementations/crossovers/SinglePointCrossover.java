@@ -4,10 +4,9 @@ import interfaces.Crossover;
 
 import java.util.Map;
 
-public class SinglePointCrossover implements Crossover {
+public class SinglePointCrossover {
 
 
-    @Override
     public Map.Entry<Character, Character> cross(Character c1, Character c2) {
         return null;
     }
