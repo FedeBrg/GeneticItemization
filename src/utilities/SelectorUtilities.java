@@ -21,4 +21,13 @@ public class SelectorUtilities {
         return Math.random() * (upper - lower) + lower;
     }
 
+    /* Generar una temperatura a partir de una */
+    public double calculateNewTemperature(double temperature){
+        return generateRandomNumber(0.95, 0.99) * temperature;
+    }
+
+    /* Calcula e^(f(t)/T) */
+    public double getBoltzmannFunction(Character c, double temperature) {
+        return Math.exp(c.getPerformance() / temperature);
+    }
 }
