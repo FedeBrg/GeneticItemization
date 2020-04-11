@@ -8,6 +8,7 @@ import utilities.SelectorUtilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class RankingSelection implements Selector {
@@ -25,7 +26,7 @@ public class RankingSelection implements Selector {
         Character c;
 
         /* Dejamos ordenada la lista en orden descendiente (ranking) */
-        population.sort((o1, o2) -> (int) Math.floor(o1.getPerformance() - o2.getPerformance()));
+        population.sort(Comparator.comparingDouble(Character::getPerformance));
         Collections.reverse(population);
 
         /* Ahora con el ranking hacemos la nueva funcion de performance */

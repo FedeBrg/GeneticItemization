@@ -12,5 +12,8 @@ public interface RoleGame {
      List<Equipment> getGloves();
      List<Equipment> getChestplates();
      double getPm();
+     long getStopTime();
+     int getCurrentGeneration();
+     int getMaxGeneration();
 
 }

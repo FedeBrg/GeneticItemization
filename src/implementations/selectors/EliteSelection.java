@@ -6,6 +6,7 @@ import character.CharacterImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EliteSelection implements Selector {
@@ -19,7 +20,7 @@ public class EliteSelection implements Selector {
         Character c;
 
         /* Dejamos ordenada la lista en orden descendiente */
-        population.sort((o1, o2) -> (int) Math.floor(o1.getPerformance() - o2.getPerformance()));
+        population.sort(Comparator.comparingDouble(Character::getPerformance));
         Collections.reverse(population);
 
         /* Agarramos n veces cada personita */

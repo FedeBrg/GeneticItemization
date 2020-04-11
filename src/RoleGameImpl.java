@@ -1,7 +1,13 @@
 import classes.Archer;
+import implementations.criterias.GenerationQuantityCriteria;
+import implementations.criterias.TimeCriteria;
 import implementations.crossovers.SinglePointCrossover;
+import implementations.mutations.IndividualGenMutation;
+import implementations.mutations.MultiGenMutation;
 import implementations.selectors.BoltzmannSelection;
+import implementations.selectors.EliteSelection;
 import implementations.selectors.ProbabilisticTournamentSelection;
+import implementations.selectors.RouletteSelection;
 import interfaces.*;
 import interfaces.Class;
 import interfaces.RoleGame;
@@ -13,15 +19,25 @@ import character.CharacterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class RoleGameImpl implements RoleGame {
+
+    /* Listas de items */
     private List<Equipment> weapons;
     private List<Equipment> boots;
     private List<Equipment> helmets;
     private List<Equipment> gloves;
     private List<Equipment> chestplates;
+
+    /* Probabilidad */
     double pm;
+
+    /* Atributos necesarios para determinar el corte */
+    private long stopTime;
+    private int currentGeneration;
+    private int maxGeneration;
 
     @Override
     public List<Equipment> getWeapons() {
@@ -53,6 +69,21 @@ public class RoleGameImpl implements RoleGame {
         return pm;
     }
 
+    @Override
+    public long getStopTime() {
+        return stopTime;
+    }
+
+    @Override
+    public int getCurrentGeneration() {
+        return currentGeneration;
+    }
+
+    @Override
+    public int getMaxGeneration() {
+        return maxGeneration;
+    }
+
     public RoleGameImpl() {
         Parser p = new Parser();
 
@@ -63,23 +94,61 @@ public class RoleGameImpl implements RoleGame {
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
         pm = 0.3;
+
+        stopTime = 5000;
+        currentGeneration = 0;
+        maxGeneration = 15;
     }
 
     public static void main(String[] args){
+
+        /* Iniciamos todo lo que necesitamos */
         RoleGameImpl rg = new RoleGameImpl();
-        Selector s = new BoltzmannSelection();
-        Crossover cross = new SinglePointCrossover();
-        List<Character> chars = rg.randomGeneration(new Archer(),100);
+        Selector selectorMethod = new RouletteSelection();
+        Crossover crossoverMethod = new SinglePointCrossover();
+        Mutation mutationMethod = new IndividualGenMutation();
+        Criteria criteriaMethod = new GenerationQuantityCriteria();
+        int populationSize = 10, i, j;
+        List<Character> currentPopulation = rg.randomGeneration(new Archer(),populationSize);
+        List<Character> recombinedPopulation;
+        Map.Entry<Character, Character> recombinedCharacters;
+        boolean stopCondition = false;
 
+        /* Iniciamos el criterio de corte (solo por si es necesario) */
+        criteriaMethod.start();
 
-        System.out.println("INICIAL\n");
-        for(Character c : chars){
-            c.printCharacter();
+        /* Se haran las iteraciones necesarias segun el criterio de corte */
+        while(!stopCondition){
+            recombinedPopulation = new ArrayList<>();
+
+            /* Se recombinan los padres y se agregan sus hijos a la poblacion */
+            for(int k = 0; k < populationSize; k+=2){
+                i = rg.generateRandomIndex(populationSize);
+                j = rg.generateRandomIndex(populationSize);
+                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(i), currentPopulation.get(j));
+                recombinedPopulation.add(recombinedCharacters.getValue());
+                recombinedPopulation.add(recombinedCharacters.getKey());
+            }
+
+            /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
+            for(Character c : recombinedPopulation){
+                currentPopulation.add(mutationMethod.mutate(c,rg));
+            }
+
+            /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
+            currentPopulation = selectorMethod.select(currentPopulation, populationSize);
+
+            /* Incrementamos el numero de generacion */
+            rg.incrementGenerationNumber();
+
+            /* Vemos si ya es hora de cortar */
+            stopCondition = criteriaMethod.check(rg);
         }
 
-        System.out.println("FINAL\n");
-        for(Character cha : s.select(chars, 25)){
-            cha.printCharacter();
+        System.out.println("TIEMPO CUMPLIDO!\n");
+        System.out.printf("GENERACION = %d\n", rg.currentGeneration);
+        for(Character c : currentPopulation){
+            c.printCharacter();
         }
 
     }
@@ -113,5 +182,14 @@ public class RoleGameImpl implements RoleGame {
         }
 
         return characters;
+    }
+
+    private int generateRandomIndex(int size){
+        Random r = new Random();
+        return Math.abs(r.nextInt()) % size;
+    }
+
+    public void incrementGenerationNumber(){
+        this.currentGeneration++;
     }
 }
