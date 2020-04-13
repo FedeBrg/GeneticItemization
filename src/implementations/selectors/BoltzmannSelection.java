@@ -7,6 +7,7 @@ import utilities.CharacterWithRelativePerformance;
 import utilities.SelectorUtilities;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class BoltzmannSelection implements Selector {
@@ -24,7 +25,7 @@ public class BoltzmannSelection implements Selector {
         int index;
 
         /* Dejamos ordenada la lista en orden creciente */
-        population.sort((o1, o2) -> (int) Math.floor(o1.getPerformance() - o2.getPerformance()));
+        population.sort(Comparator.comparingDouble(Character::getPerformance));
 
         /* Hacemos la nueva funcion de performance sin dividir por el promedio */
         for (Character c : population) {

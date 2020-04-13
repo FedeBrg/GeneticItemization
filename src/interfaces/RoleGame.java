@@ -13,7 +13,14 @@ public interface RoleGame {
      List<Equipment> getChestplates();
      double getPm();
      long getStopTime();
-     int getCurrentGeneration();
      int getMaxGeneration();
+     int getCurrentGeneration();
+     int getGenerationsNotChanging();
+     double getCurrentGenerationPerformance();
+     void setCurrentGenerationPerformance(double currentGenerationPerformance);
+     double getTolerance();
+     double getBestPerformance();
+     void setBestPerformance(double bestPerformance);
+     double getTargetPopulationPerformance();
 
 }

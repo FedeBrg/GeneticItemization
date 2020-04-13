@@ -31,4 +31,6 @@ public interface Character {
     void setHeight(double height);
 
     void printCharacter();
+
+    double getEquipmentTotalPerformance();
 }

@@ -49,6 +49,21 @@ public class CharacterImpl implements Character {
         this.characterClass = characterClass;
     }
 
+    @Override
+    public double getEquipmentTotalPerformance() {
+        double toReturn = 0;
+
+        for(Equipment e : equipment){
+            toReturn += e.getExpertise();
+            toReturn += e.getAgility();
+            toReturn += e.getHealth();
+            toReturn += e.getResistance();
+            toReturn += e.getStrength();
+        }
+
+        return toReturn;
+    }
+
     public void calculateAttack() {
         double atm = 0.7 - Math.pow((3 * height - 5), 4) + Math.pow((3 * height - 5), 2) + height / 4;
         double s = 0, a = 0, e = 0;
