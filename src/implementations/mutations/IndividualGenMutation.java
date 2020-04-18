@@ -2,7 +2,9 @@ package implementations.mutations;
 
 import character.CharacterImpl;
 import equipment.Equipment;
+import implementations.mutationStyles.RandomizedMutation;
 import interfaces.Mutation;
+import interfaces.MutationStyle;
 import interfaces.RoleGame;
 import interfaces.Character;
 import utilities.MutationUtilities;
@@ -15,7 +17,7 @@ import java.util.Random;
 public class IndividualGenMutation implements Mutation {
 
     @Override
-    public Character mutate(Character c, RoleGame rg) {
+    public Character mutate(Character c, RoleGame rg, MutationStyle ms) {
 
         Random r = new Random();
         double prob = r.nextDouble();
@@ -37,13 +39,14 @@ public class IndividualGenMutation implements Mutation {
             mutated.setHeight(c.getHeight());
         }
 
-        List<List<Equipment>> l = MutationUtilities.getList(rg);
+        //List<List<Equipment>> l = MutationUtilities.getList(rg);
 
         List<Equipment> equipment = new ArrayList<>();
 
         for (int i = 0; i < 5;i++){
             if(gen == i){
-                equipment.add(l.get(i).get(r.nextInt(l.get(i).size())));
+//                equipment.add(l.get(i).get(r.nextInt(l.get(i).size())));
+                equipment.add(ms.getMutatedEquipment(c.getEquipment().get(i),rg,i));
             }
             else {
                 equipment.add(c.getEquipment().get(i));

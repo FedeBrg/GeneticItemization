@@ -1,6 +1,6 @@
 package equipment;
 
-public class Equipment {
+public class Equipment implements Comparable<Equipment>{
     private int id;
     private double strength;
     private double agility;
@@ -41,4 +41,17 @@ public class Equipment {
         return health;
     }
 
+    public double getQuality(){
+        return strength+agility+expertise+resistance+health;
+    }
+
+
+    @Override
+    public int compareTo(Equipment o) {
+        double diff = getQuality()-o.getQuality();
+        if(diff == 0){
+            return 0;
+        }
+        return diff>0?1:-1;
+    }
 }

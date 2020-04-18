@@ -2,8 +2,10 @@ package implementations.mutations;
 
 import character.CharacterImpl;
 import equipment.Equipment;
+import implementations.mutationStyles.RandomizedMutation;
 import interfaces.Character;
 import interfaces.Mutation;
+import interfaces.MutationStyle;
 import interfaces.RoleGame;
 import utilities.MutationUtilities;
 
@@ -14,7 +16,7 @@ import java.util.Random;
 public class MultiGenMutation implements Mutation {
 
     @Override
-    public Character mutate(Character c, RoleGame rg) {
+    public Character mutate(Character c, RoleGame rg, MutationStyle ms) {
 
         Random r = new Random();
 
@@ -41,13 +43,13 @@ public class MultiGenMutation implements Mutation {
             mutated.setHeight(c.getHeight());
         }
 
-        List<List<Equipment>> l = MutationUtilities.getList(rg);
+        //List<List<Equipment>> l = MutationUtilities.getList(rg);
 
         List<Equipment> equipment = new ArrayList<>();
-
         for (int i = 0; i < 5;i++){
             if(genes.contains(i) /*&& r.nextDouble()<rg.getPm() O ESTO?*/){
-                equipment.add(l.get(i).get(r.nextInt(l.get(i).size())));
+                equipment.add(ms.getMutatedEquipment(c.getEquipment().get(i),rg,i));
+//                equipment.add(l.get(i).get(r.nextInt(l.get(i).size())));
             }
             else {
                 equipment.add(c.getEquipment().get(i));

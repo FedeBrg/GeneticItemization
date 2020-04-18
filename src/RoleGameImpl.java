@@ -1,6 +1,7 @@
 import classes.Archer;
 import implementations.criterias.*;
 import implementations.crossovers.SinglePointCrossover;
+import implementations.mutationStyles.RandomizedMutation;
 import implementations.mutations.IndividualGenMutation;
 import implementations.mutations.MultiGenMutation;
 import implementations.selectors.BoltzmannSelection;
@@ -26,6 +27,14 @@ public class RoleGameImpl implements RoleGame {
     private List<Equipment> helmets;
     private List<Equipment> gloves;
     private List<Equipment> chestplates;
+
+    /* TreeSets para mutation */
+    private  TreeSet<Equipment> weaponsTree;
+    private  TreeSet<Equipment> bootsTree;
+    private  TreeSet<Equipment> helmetsTree;
+    private  TreeSet<Equipment> glovesTree;
+    private  TreeSet<Equipment> chestplatesTree;
+
 
     /* Probabilidad */
     double pm;
@@ -63,6 +72,31 @@ public class RoleGameImpl implements RoleGame {
     @Override
     public List<Equipment> getChestplates() {
         return chestplates;
+    }
+
+    @Override
+    public TreeSet<Equipment> getWeaponsTree() {
+        return weaponsTree;
+    }
+
+    @Override
+    public TreeSet<Equipment> getBootsTree() {
+        return bootsTree;
+    }
+
+    @Override
+    public TreeSet<Equipment> getHelmetsTree() {
+        return helmetsTree;
+    }
+
+    @Override
+    public TreeSet<Equipment> getGlovesTree() {
+        return glovesTree;
+    }
+
+    @Override
+    public TreeSet<Equipment> getChestplatesTree() {
+        return chestplatesTree;
     }
 
     @Override
@@ -130,6 +164,14 @@ public class RoleGameImpl implements RoleGame {
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
+        weaponsTree = new TreeSet<>(weapons);
+        bootsTree = new TreeSet<>(boots);
+        helmetsTree = new TreeSet<>(helmets);
+        glovesTree = new TreeSet<>(gloves);
+        chestplatesTree = new TreeSet<>(chestplates);
+
+
+
         /* Probability */
         pm = 0.3;
 
@@ -160,6 +202,7 @@ public class RoleGameImpl implements RoleGame {
         RoleGameImpl rg = new RoleGameImpl();
         Selector selectorMethod = new RouletteSelection();
         Crossover crossoverMethod = new SinglePointCrossover();
+        MutationStyle mutationStyle = new RandomizedMutation();
         Mutation mutationMethod = new IndividualGenMutation();
         Criteria criteriaMethod = new AcceptableSolutionCriteria();
         int populationSize = 25, i, j;
@@ -190,7 +233,7 @@ public class RoleGameImpl implements RoleGame {
 
             /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
             for(Character c : recombinedPopulation){
-                currentPopulation.add(mutationMethod.mutate(c,rg));
+                currentPopulation.add(mutationMethod.mutate(c,rg,mutationStyle));
             }
 
             /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
