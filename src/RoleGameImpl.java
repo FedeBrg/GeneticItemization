@@ -269,6 +269,7 @@ public class RoleGameImpl implements RoleGame {
         List<Character> betterPerformanceChildren;
         Map.Entry<Character, Character> recombinedCharacters;
         boolean stopCondition = false;
+        int ceilSize = (int) Math.ceil(populationSize * rg.a);
 
         /* Iniciamos el criterio de corte (solo por si es necesario) */
         rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
@@ -301,14 +302,14 @@ public class RoleGameImpl implements RoleGame {
             }
 
             /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
-            betterPerformanceChildren = selectorMethod1.select(mutatedPopulation,(int) Math.ceil(populationSize*rg.a));
-            betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,(int) Math.floor(populationSize*(1-rg.a))));
+            betterPerformanceChildren = selectorMethod1.select(mutatedPopulation, ceilSize);
+            betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,populationSize-ceilSize));
 
             /* Incrementamos el numero de generacion */
             rg.incrementGenerationNumber();
 
             /* Seleccionamos la siguiente generacion */
-            currentPopulation = implementationMethod.selectNextGeneration(currentPopulation, betterPerformanceChildren, populationSize);
+            currentPopulation = implementationMethod.selectNextGeneration(currentPopulation, betterPerformanceChildren, populationSize, replacementMethod1, replacementMethod2, rg.b);
 
             /* Calculamos la mejor performance */
             rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
