@@ -132,3 +132,8 @@ buildNumber.properties
 # End of https://www.gitignore.io/api/java,maven,intellij
 /.idea/$CACHE_FILE$
 /GeneticItemization.iml
+/armas.tsv
+/botas.tsv
+/cascos.tsv
+/guantes.tsv
+/pecheras.tsv
