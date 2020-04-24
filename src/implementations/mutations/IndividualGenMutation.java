@@ -57,4 +57,9 @@ public class IndividualGenMutation implements Mutation {
 
         return mutated;
     }
+
+    @Override
+    public String toString() {
+        return "Individual Gen";
+    }
 }

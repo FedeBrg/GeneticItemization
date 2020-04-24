@@ -46,4 +46,8 @@ public class CompleteMutation implements Mutation {
 
     }
 
+    @Override
+    public String toString() {
+        return "Complete";
+    }
 }

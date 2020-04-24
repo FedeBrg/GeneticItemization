@@ -8,4 +8,8 @@ public class Support  implements Class {
         return 0.3 * attack + 0.8 * defense;
     }
 
+    @Override
+    public String toString() {
+        return "Support";
+    }
 }

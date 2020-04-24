@@ -26,4 +26,9 @@ public class ContentCriteria implements Criteria {
         lastBestPerformance = rg.getBestPerformance();
         return generationsNotChanging == rg.getGenerationsNotChanging();
     }
+
+    @Override
+    public String toString() {
+        return "Content";
+    }
 }

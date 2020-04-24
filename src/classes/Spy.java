@@ -9,4 +9,8 @@ public class Spy implements Class {
         return 0.8 * attack + 0.3 * defense;
     }
 
+    @Override
+    public String toString() {
+        return "Spy";
+    }
 }

@@ -20,4 +20,9 @@ public class RandomizedMutation implements MutationStyle {
         return l.get(i).get(r.nextInt(l.get(i).size()));
 
     }
+
+    @Override
+    public String toString() {
+        return "Randomized";
+    }
 }

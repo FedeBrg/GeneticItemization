@@ -51,4 +51,8 @@ public class ProbabilisticTournamentSelection implements Selector {
         return Math.abs(r.nextInt()) % size;
     }
 
+    @Override
+    public String toString() {
+        return "Probabilistic Tournament";
+    }
 }

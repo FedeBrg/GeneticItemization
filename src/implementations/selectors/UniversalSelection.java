@@ -72,4 +72,8 @@ public class UniversalSelection implements Selector {
         return toReturn;
     }
 
+    @Override
+    public String toString() {
+        return "Universal";
+    }
 }

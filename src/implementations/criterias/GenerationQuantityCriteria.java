@@ -12,4 +12,9 @@ public class GenerationQuantityCriteria implements Criteria {
     public boolean check(RoleGame rg) {
         return rg.getCurrentGeneration() == rg.getMaxGeneration();
     }
+
+    @Override
+    public String toString() {
+        return "Generation quantity";
+    }
 }

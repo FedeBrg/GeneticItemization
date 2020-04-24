@@ -60,4 +60,9 @@ public class RouletteSelection implements Selector {
 
         return toReturn;
     }
+
+    @Override
+    public String toString() {
+        return "Roulette";
+    }
 }

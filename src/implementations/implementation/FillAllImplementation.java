@@ -18,11 +18,15 @@ public class FillAllImplementation implements Implementation {
         Random random = new Random(System.currentTimeMillis());
 
         for(int i = 0; i < size; i++){
-            index = Math.abs(random.nextInt()) % allCharacterListSize;
+            index = random.nextInt(allCharacterListSize);
             toReturn.add(allCharactersList.get(index));
         }
 
         return toReturn;
     }
 
+    @Override
+    public String toString() {
+        return "Fill all";
+    }
 }

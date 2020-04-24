@@ -39,4 +39,9 @@ public class SmallMutation implements MutationStyle {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return "Small delta";
+    }
 }

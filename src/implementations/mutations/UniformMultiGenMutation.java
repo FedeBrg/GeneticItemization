@@ -46,4 +46,9 @@ public class UniformMultiGenMutation implements Mutation {
         return mutated;
 
     }
+
+    @Override
+    public String toString() {
+        return "Uniform Multi Gen";
+    }
 }

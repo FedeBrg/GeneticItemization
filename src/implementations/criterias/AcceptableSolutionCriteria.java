@@ -13,4 +13,8 @@ public class AcceptableSolutionCriteria implements Criteria {
         return rg.getCurrentGenerationPerformance() >= rg.getTargetPopulationPerformance();
     }
 
+    @Override
+    public String toString() {
+        return "Acceptable Solution";
+    }
 }

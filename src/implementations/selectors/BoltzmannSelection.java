@@ -76,4 +76,8 @@ public class BoltzmannSelection implements Selector {
         return toReturn;
     }
 
+    @Override
+    public String toString() {
+        return "Boltzmann";
+    }
 }

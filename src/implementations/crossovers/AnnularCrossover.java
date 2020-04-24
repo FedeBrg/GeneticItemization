@@ -54,4 +54,8 @@ public class AnnularCrossover implements Crossover {
         return new AbstractMap.SimpleEntry<>(mutated1,mutated2);
     }
 
+    @Override
+    public String toString() {
+        return "Annular";
+    }
 }

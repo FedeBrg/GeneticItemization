@@ -7,6 +7,7 @@ import implementations.crossovers.AnnularCrossover;
 import implementations.crossovers.SinglePointCrossover;
 import implementations.crossovers.TwoPointCrossover;
 import implementations.crossovers.UniformCrossover;
+import implementations.implementation.FillAllImplementation;
 import implementations.implementation.FillParentImplementation;
 import implementations.mutationStyles.RandomizedMutation;
 import implementations.mutationStyles.SmallMutation;
@@ -232,6 +233,8 @@ public class RoleGameImpl implements RoleGame {
         Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")));
         Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")));
 
+        Implementation implementationMethod = rg.getImplementation(Integer.parseInt(prop.getProperty("implementation")));
+
         Criteria criteriaMethod = rg.getCriteria(Integer.parseInt(prop.getProperty("endCriteria")));
 
         if(criteriaMethod.getClass() == TimeCriteria.class){
@@ -266,7 +269,6 @@ public class RoleGameImpl implements RoleGame {
         List<Character> betterPerformanceChildren;
         Map.Entry<Character, Character> recombinedCharacters;
         boolean stopCondition = false;
-        Implementation implementationMethod = new FillParentImplementation();
 
         /* Iniciamos el criterio de corte (solo por si es necesario) */
         rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
@@ -493,6 +495,19 @@ public class RoleGameImpl implements RoleGame {
                 return new EliteSelection();
         }
 
+    }
+
+    private Implementation getImplementation(int arg){
+        switch (arg){
+            case 1:
+                return new FillAllImplementation();
+
+            case 2:
+                return new FillParentImplementation();
+
+            default:
+                return new FillAllImplementation();
+        }
     }
 
     private Criteria getCriteria(int arg){

@@ -16,4 +16,9 @@ public class TimeCriteria implements Criteria {
     public boolean check(RoleGame rg){
         return System.currentTimeMillis() - startTime >= rg.getStopTime();
     }
+
+    @Override
+    public String toString() {
+        return "Time";
+    }
 }

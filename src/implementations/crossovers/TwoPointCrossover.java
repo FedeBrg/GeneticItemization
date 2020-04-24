@@ -55,4 +55,8 @@ public class TwoPointCrossover implements Crossover {
         return new AbstractMap.SimpleEntry<>(mutated1,mutated2);
     }
 
+    @Override
+    public String toString() {
+        return "Two point";
+    }
 }

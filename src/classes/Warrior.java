@@ -10,4 +10,8 @@ public class Warrior implements Class {
         return 0.6 * attack + 0.6 * defense;
     }
 
+    @Override
+    public String toString() {
+        return "Warrior";
+    }
 }

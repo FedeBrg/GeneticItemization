@@ -61,5 +61,8 @@ public class MultiGenMutation implements Mutation {
         return mutated;
     }
 
-
+    @Override
+    public String toString() {
+        return "Multi Gen";
+    }
 }

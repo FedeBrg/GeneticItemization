@@ -58,4 +58,9 @@ public class DeterministicTournamentSelection implements Selector {
         return winners;
     }
 
+
+    @Override
+    public String toString() {
+        return "Deterministic Tournament";
+    }
 }

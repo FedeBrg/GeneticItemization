@@ -9,5 +9,8 @@ public class Archer implements Class {
         return 0.9 * attack + 0.1 * defense;
     }
 
-
+    @Override
+    public String toString() {
+        return "Archer";
+    }
 }

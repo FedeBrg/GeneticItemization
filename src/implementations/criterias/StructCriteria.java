@@ -33,4 +33,9 @@ public class StructCriteria implements Criteria {
         lastGenerationPerformance = rg.getCurrentGenerationPerformance();
         return generationsNotChanging == rg.getGenerationsNotChanging();
     }
+
+    @Override
+    public String toString() {
+        return "Struct";
+    }
 }
