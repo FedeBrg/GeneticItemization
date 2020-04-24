@@ -12,6 +12,12 @@ import java.util.List;
 
 public class BoltzmannSelection implements Selector {
 
+    private double t;
+
+    public BoltzmannSelection(double t) {
+        this.t = t;
+    }
+
     @Override
     public List<Character> select(List<Character> population, int limit) {
 
@@ -21,7 +27,7 @@ public class BoltzmannSelection implements Selector {
         List<Character> toReturn = new ArrayList<>();
         SelectorUtilities su = new SelectorUtilities();
         double randomNumber, accumulatedPerformance, functionValue;
-        double totalPerformance = 0, avgValue = 0, t = population.size();
+        double totalPerformance = 0, avgValue = 0;
         int index;
 
         /* Dejamos ordenada la lista en orden creciente */
@@ -30,10 +36,12 @@ public class BoltzmannSelection implements Selector {
         /* Hacemos la nueva funcion de performance sin dividir por el promedio */
         for (Character c : population) {
             functionValue = su.getBoltzmannFunction(c,t);
-            t = su.calculateNewTemperature(t);
             avgValue += functionValue;
             newPerformancePopulation.add(new CharacterWithFixedPerformance(c, functionValue));
         }
+
+        this.t = su.calculateNewTemperature(t);
+        System.out.println(t);
 
         /* Calculamos el promedio de las e^(f(t)/L) */
         avgValue = avgValue / newPerformancePopulation.size();

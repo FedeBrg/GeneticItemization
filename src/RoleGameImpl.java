@@ -32,11 +32,11 @@ import java.util.*;
 public class RoleGameImpl implements RoleGame {
 
     /* Listas de items */
-    private List<Equipment> weapons;
-    private List<Equipment> boots;
-    private List<Equipment> helmets;
-    private List<Equipment> gloves;
-    private List<Equipment> chestplates;
+    private final List<Equipment> weapons;
+    private final List<Equipment> boots;
+    private final List<Equipment> helmets;
+    private final List<Equipment> gloves;
+    private final List<Equipment> chestplates;
 
     /* TreeSets para mutation */
     private  TreeSet<Equipment> weaponsTree;
@@ -177,11 +177,11 @@ public class RoleGameImpl implements RoleGame {
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
-        weaponsTree = new TreeSet<>(weapons);
-        bootsTree = new TreeSet<>(boots);
-        helmetsTree = new TreeSet<>(helmets);
-        glovesTree = new TreeSet<>(gloves);
-        chestplatesTree = new TreeSet<>(chestplates);
+//        weaponsTree = new TreeSet<>(weapons);
+//        bootsTree = new TreeSet<>(boots);
+//        helmetsTree = new TreeSet<>(helmets);
+//        glovesTree = new TreeSet<>(gloves);
+//        chestplatesTree = new TreeSet<>(chestplates);
 
         /* Probability */
         pm = 0.3;
@@ -227,11 +227,11 @@ public class RoleGameImpl implements RoleGame {
         Mutation mutationMethod = rg.getMutation(Integer.parseInt(prop.getProperty("mutation")));
         MutationStyle mutationStyle = rg.getMutationStyle(Integer.parseInt(prop.getProperty("mutationStyle")));
 
-        Selector selectorMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("selection1")));
-        Selector selectorMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("selection2")));
+        Selector selectorMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("selection1")),prop);
+        Selector selectorMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("selection2")),prop);
 
-        Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")));
-        Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")));
+        Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")), prop);
+        Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")), prop);
 
         Implementation implementationMethod = rg.getImplementation(Integer.parseInt(prop.getProperty("implementation")));
 
@@ -242,7 +242,7 @@ public class RoleGameImpl implements RoleGame {
         }
         else if(criteriaMethod.getClass() == GenerationQuantityCriteria.class){
             rg.currentGeneration = 0;
-            rg.currentGeneration = Integer.parseInt(prop.getProperty("maxGeneration"));
+            rg.maxGeneration = Integer.parseInt(prop.getProperty("maxGeneration"));
         }
         else if(criteriaMethod.getClass() == AcceptableSolutionCriteria.class){
             rg.targetPopulationPerformance = Integer.parseInt(prop.getProperty("targetPopulationPerformance"));
@@ -302,8 +302,10 @@ public class RoleGameImpl implements RoleGame {
             }
 
             /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
+
             betterPerformanceChildren = selectorMethod1.select(mutatedPopulation, ceilSize);
             betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,populationSize-ceilSize));
+            //rg.printPopulation(betterPerformanceChildren,String.format("*******************************************\nCurrent gen %d\n",rg.currentGeneration));
 
             /* Incrementamos el numero de generacion */
             rg.incrementGenerationNumber();
@@ -469,7 +471,7 @@ public class RoleGameImpl implements RoleGame {
 
     }
 
-    private Selector getSelection(int arg){
+    private Selector getSelection(int arg, Properties prop){
         switch (arg){
             case 1:
                 return new EliteSelection();
@@ -481,7 +483,8 @@ public class RoleGameImpl implements RoleGame {
                 return new UniversalSelection();
 
             case 4:
-                return new BoltzmannSelection();
+
+                return new BoltzmannSelection(Double.parseDouble(prop.getProperty("initialTemperature")));
 
             case 5:
                 return new DeterministicTournamentSelection();

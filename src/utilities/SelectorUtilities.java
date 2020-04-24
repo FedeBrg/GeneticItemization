@@ -18,12 +18,14 @@ public class SelectorUtilities {
 
     /* Generar un numero random entre [0, 1) */
     public double generateRandomNumber(double lower, double upper){
+
         return Math.random() * (upper - lower) + lower;
     }
 
     /* Generar una temperatura a partir de una */
     public double calculateNewTemperature(double temperature){
-        return generateRandomNumber(0.95, 0.99) * temperature;
+//        return generateRandomNumber(0.95, 0.99) * temperature;
+        return 0.98 * temperature>1?0.98 * temperature:1;
     }
 
     /* Calcula e^(f(t)/T) */

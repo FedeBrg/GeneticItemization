@@ -13,18 +13,26 @@ public class DeterministicTournamentSelection implements Selector {
     public List<Character> select(List<Character> population, int limit) {
 
         /* Ingredientes */
-        int tournamentSize = (int) Math.floor((double) population.size() / limit);
-        boolean hasExtraCharacters = tournamentSize * limit < population.size();
-        List<Tournament> tournaments = new ArrayList<>();
+
         List<Character> winners = new ArrayList<>();
+        if(limit == 0){
+            return winners;
+        }
+        int tournamentSize = population.size() / limit;
+        boolean hasExtraCharacters = tournamentSize * limit != population.size();
+
+
+
+        List<Tournament> tournaments = new ArrayList<>();
+
         int notIncludedIndex = 0;
         Tournament t;
 
         /* Creamos los torneos con el tamaño que calculamos */
-        for(int i = 0; i < population.size(); i += tournamentSize){
+        for(int i = 0; i < population.size(); ){
 
             /* Esta condicion es para que la cantidad de torneos sea tal que solo se compita 1 vez */
-            if(i + tournamentSize >= population.size()){
+            if(i + tournamentSize > population.size()){
                 notIncludedIndex = i;
                 break;
             }

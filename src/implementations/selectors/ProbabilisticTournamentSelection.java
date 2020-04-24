@@ -18,6 +18,9 @@ public class ProbabilisticTournamentSelection implements Selector {
         boolean betterPick;
         SelectorUtilities su = new SelectorUtilities();
         List<Character> winners  = new ArrayList<>();
+        if(limit == 0){
+            return  winners;
+        }
         int i, j, size = population.size();
 
         /* Competencias entre dos */
@@ -48,7 +51,7 @@ public class ProbabilisticTournamentSelection implements Selector {
 
     private int generateRandomIndex(int size){
         Random r = new Random();
-        return Math.abs(r.nextInt()) % size;
+        return r.nextInt(size);
     }
 
     @Override
