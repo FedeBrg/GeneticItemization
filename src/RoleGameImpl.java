@@ -1,13 +1,19 @@
 import classes.Archer;
+import classes.Spy;
+import classes.Support;
+import classes.Warrior;
 import implementations.criterias.*;
+import implementations.crossovers.AnnularCrossover;
 import implementations.crossovers.SinglePointCrossover;
+import implementations.crossovers.TwoPointCrossover;
+import implementations.crossovers.UniformCrossover;
 import implementations.mutationStyles.RandomizedMutation;
+import implementations.mutationStyles.SmallMutation;
+import implementations.mutations.CompleteMutation;
 import implementations.mutations.IndividualGenMutation;
 import implementations.mutations.MultiGenMutation;
-import implementations.selectors.BoltzmannSelection;
-import implementations.selectors.EliteSelection;
-import implementations.selectors.ProbabilisticTournamentSelection;
-import implementations.selectors.RouletteSelection;
+import implementations.mutations.UniformMultiGenMutation;
+import implementations.selectors.*;
 import interfaces.*;
 import interfaces.Class;
 import interfaces.RoleGame;
@@ -17,6 +23,9 @@ import utilities.Parser;
 import equipment.Equipment;
 import character.CharacterImpl;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Time;
 import java.util.*;
 
 public class RoleGameImpl implements RoleGame {
@@ -48,6 +57,9 @@ public class RoleGameImpl implements RoleGame {
     private double currentGenerationPerformance;
     private double bestPerformance;
     private double targetPopulationPerformance;
+
+    private double a;
+    private double b;
 
     @Override
     public List<Equipment> getWeapons() {
@@ -198,15 +210,59 @@ public class RoleGameImpl implements RoleGame {
 
     public static void main(String[] args){
 
+        Properties prop = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream("config.properties");
+            prop.load(fis);
+
+        } catch (IOException e) {
+            System.out.println("Can't open config file.\n");
+        }
+
         /* Iniciamos lo que necesitamos*/
         RoleGameImpl rg = new RoleGameImpl();
-        Selector selectorMethod = new RouletteSelection();
-        Crossover crossoverMethod = new SinglePointCrossover();
-        MutationStyle mutationStyle = new RandomizedMutation();
-        Mutation mutationMethod = new IndividualGenMutation();
-        Criteria criteriaMethod = new AcceptableSolutionCriteria();
-        int populationSize = 25, i, j;
-        List<Character> currentPopulation = rg.randomGeneration(new Archer(),populationSize);
+
+
+        Class characterClass = rg.getClass(Integer.parseInt(prop.getProperty("characterClass")));
+        Crossover crossoverMethod = rg.getCrossover(Integer.parseInt(prop.getProperty("crossover")));
+        Mutation mutationMethod = rg.getMutation(Integer.parseInt(prop.getProperty("mutation")));
+        MutationStyle mutationStyle = rg.getMutationStyle(Integer.parseInt(prop.getProperty("mutationStyle")));
+
+        Selector selectorMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("selection1")));
+        Selector selectorMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("selection2")));
+
+        Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")));
+        Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")));
+
+        Criteria criteriaMethod = rg.getCriteria(Integer.parseInt(prop.getProperty("endCriteria")));
+
+        if(criteriaMethod.getClass() == TimeCriteria.class){
+            rg.stopTime = Integer.parseInt(prop.getProperty("stopTime"));
+        }
+        else if(criteriaMethod.getClass() == GenerationQuantityCriteria.class){
+            rg.currentGeneration = 0;
+            rg.currentGeneration = Integer.parseInt(prop.getProperty("maxGeneration"));
+        }
+        else if(criteriaMethod.getClass() == AcceptableSolutionCriteria.class){
+            rg.targetPopulationPerformance = Integer.parseInt(prop.getProperty("targetPopulationPerformance"));
+        }
+        else if(criteriaMethod.getClass() == StructCriteria.class){
+            rg.currentGenerationPerformance = 0;
+            rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
+            rg.tolerance = Integer.parseInt(prop.getProperty("tolerance"));
+        }
+        else if(criteriaMethod.getClass() == ContentCriteria.class){
+            rg.bestPerformance = 0;
+            rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
+            rg.tolerance = Integer.parseInt(prop.getProperty("tolerance"));
+        }
+
+        rg.a = Double.parseDouble(prop.getProperty("a"));
+        rg.b = Double.parseDouble(prop.getProperty("b"));
+        rg.pm = Double.parseDouble(prop.getProperty("mutationProbability"));
+
+        int populationSize = Integer.parseInt(prop.getProperty("populationSize"));
+        List<Character> currentPopulation = rg.randomGeneration(characterClass,populationSize);
         List<Character> recombinedPopulation;
         Map.Entry<Character, Character> recombinedCharacters;
         boolean stopCondition = false;
@@ -223,12 +279,14 @@ public class RoleGameImpl implements RoleGame {
             recombinedPopulation = new ArrayList<>();
 
             /* Se recombinan los padres y se agregan sus hijos a la poblacion */
-            for(int k = 0; k < populationSize; k+=2){
-                i = rg.generateRandomIndex(populationSize);
-                j = rg.generateRandomIndex(populationSize);
-                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(i), currentPopulation.get(j));
+            Collections.shuffle(currentPopulation);
+            for(int k = 0; k<populationSize-1;k+=2){
+                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(k),currentPopulation.get(k+1));
                 recombinedPopulation.add(recombinedCharacters.getValue());
                 recombinedPopulation.add(recombinedCharacters.getKey());
+            }
+            if(populationSize%2 != 0){
+                recombinedPopulation.add(currentPopulation.get(populationSize-1));
             }
 
             /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
@@ -237,7 +295,9 @@ public class RoleGameImpl implements RoleGame {
             }
 
             /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
-            currentPopulation = selectorMethod.select(currentPopulation, populationSize);
+            List<Character> auxPop = selectorMethod1.select(currentPopulation,(int) Math.ceil(populationSize*rg.a));
+            auxPop.addAll(selectorMethod2.select(currentPopulation,(int) Math.floor(populationSize*(1-rg.a))));
+            currentPopulation = auxPop;
 
             /* Incrementamos el numero de generacion */
             rg.incrementGenerationNumber();
@@ -298,7 +358,7 @@ public class RoleGameImpl implements RoleGame {
 
     private int generateRandomIndex(int size){
         Random r = new Random();
-        return Math.abs(r.nextInt()) % size;
+        return r.nextInt(size);
     }
 
     public void incrementGenerationNumber(){
@@ -323,4 +383,133 @@ public class RoleGameImpl implements RoleGame {
             c.printCharacter();
         }
     }
+
+
+    private Class getClass(int arg){
+        switch (arg){
+            case 1:
+                return new Warrior();
+
+            case 2:
+                return new Archer();
+
+            case 3:
+                return new Support();
+
+            case 4:
+                return new Spy();
+
+            default:
+                return new Warrior();
+        }
+
+    }
+
+    private Crossover getCrossover(int arg){
+        switch (arg){
+            case 1:
+                return new SinglePointCrossover();
+
+            case 2:
+                return new TwoPointCrossover();
+
+            case 3:
+                return new AnnularCrossover();
+
+            case 4:
+                return new UniformCrossover();
+
+            default:
+                return new SinglePointCrossover();
+        }
+
+    }
+
+    private Mutation getMutation(int arg){
+        switch (arg){
+            case 1:
+                return new IndividualGenMutation();
+
+            case 2:
+                return new MultiGenMutation();
+
+            case 3:
+                return new UniformMultiGenMutation();
+
+            case 4:
+                return new CompleteMutation();
+
+            default:
+                return new IndividualGenMutation();
+        }
+
+    }
+
+    private MutationStyle getMutationStyle(int arg){
+        switch (arg){
+            case 1:
+                return new RandomizedMutation();
+
+            case 2:
+                return new SmallMutation();
+
+            default:
+                return new RandomizedMutation();
+        }
+
+    }
+
+    private Selector getSelection(int arg){
+        switch (arg){
+            case 1:
+                return new EliteSelection();
+
+            case 2:
+                return new RouletteSelection();
+
+            case 3:
+                return new UniversalSelection();
+
+            case 4:
+                return new BoltzmannSelection();
+
+            case 5:
+                return new DeterministicTournamentSelection();
+
+            case 6:
+                return new ProbabilisticTournamentSelection();
+
+            case 7:
+                return new RankingSelection();
+
+            default:
+                return new EliteSelection();
+        }
+
+    }
+
+    private Criteria getCriteria(int arg){
+        switch (arg){
+            case 1:
+                return new TimeCriteria();
+
+            case 2:
+                return new GenerationQuantityCriteria();
+
+            case 3:
+                return new AcceptableSolutionCriteria();
+
+            case 4:
+                return new StructCriteria();
+
+            case 5:
+                return new ContentCriteria();
+
+            default:
+                return new TimeCriteria();
+        }
+
+    }
+
+
 }
