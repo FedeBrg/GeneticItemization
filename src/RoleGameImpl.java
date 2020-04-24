@@ -7,6 +7,7 @@ import implementations.crossovers.AnnularCrossover;
 import implementations.crossovers.SinglePointCrossover;
 import implementations.crossovers.TwoPointCrossover;
 import implementations.crossovers.UniformCrossover;
+import implementations.implementation.FillParentImplementation;
 import implementations.mutationStyles.RandomizedMutation;
 import implementations.mutationStyles.SmallMutation;
 import implementations.mutations.CompleteMutation;
@@ -25,7 +26,6 @@ import character.CharacterImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.*;
 
 public class RoleGameImpl implements RoleGame {
@@ -44,7 +44,6 @@ public class RoleGameImpl implements RoleGame {
     private  TreeSet<Equipment> glovesTree;
     private  TreeSet<Equipment> chestplatesTree;
 
-
     /* Probabilidad */
     double pm;
 
@@ -58,6 +57,7 @@ public class RoleGameImpl implements RoleGame {
     private double bestPerformance;
     private double targetPopulationPerformance;
 
+    /* Probabilidades de cada metodo de seleccion */
     private double a;
     private double b;
 
@@ -182,8 +182,6 @@ public class RoleGameImpl implements RoleGame {
         glovesTree = new TreeSet<>(gloves);
         chestplatesTree = new TreeSet<>(chestplates);
 
-
-
         /* Probability */
         pm = 0.3;
 
@@ -210,6 +208,7 @@ public class RoleGameImpl implements RoleGame {
 
     public static void main(String[] args){
 
+        /* Leemos el archivo de input */
         Properties prop = new Properties();
         try {
             FileInputStream fis = new FileInputStream("config.properties");
@@ -221,7 +220,6 @@ public class RoleGameImpl implements RoleGame {
 
         /* Iniciamos lo que necesitamos*/
         RoleGameImpl rg = new RoleGameImpl();
-
 
         Class characterClass = rg.getClass(Integer.parseInt(prop.getProperty("characterClass")));
         Crossover crossoverMethod = rg.getCrossover(Integer.parseInt(prop.getProperty("crossover")));
@@ -264,8 +262,11 @@ public class RoleGameImpl implements RoleGame {
         int populationSize = Integer.parseInt(prop.getProperty("populationSize"));
         List<Character> currentPopulation = rg.randomGeneration(characterClass,populationSize);
         List<Character> recombinedPopulation;
+        List<Character> mutatedPopulation;
+        List<Character> betterPerformanceChildren;
         Map.Entry<Character, Character> recombinedCharacters;
         boolean stopCondition = false;
+        Implementation implementationMethod = new FillParentImplementation();
 
         /* Iniciamos el criterio de corte (solo por si es necesario) */
         rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
@@ -277,30 +278,35 @@ public class RoleGameImpl implements RoleGame {
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
             recombinedPopulation = new ArrayList<>();
+            mutatedPopulation = new ArrayList<>();
 
             /* Se recombinan los padres y se agregan sus hijos a la poblacion */
             Collections.shuffle(currentPopulation);
-            for(int k = 0; k<populationSize-1;k+=2){
-                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(k),currentPopulation.get(k+1));
+            for(int k = 0; k < populationSize - 1; k += 2){
+                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(k), currentPopulation.get(k+1));
                 recombinedPopulation.add(recombinedCharacters.getValue());
                 recombinedPopulation.add(recombinedCharacters.getKey());
             }
-            if(populationSize%2 != 0){
+
+            /* Si size es impar el ultimo se agrega */
+            if(populationSize % 2 != 0){
                 recombinedPopulation.add(currentPopulation.get(populationSize-1));
             }
 
             /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
             for(Character c : recombinedPopulation){
-                currentPopulation.add(mutationMethod.mutate(c,rg,mutationStyle));
+                mutatedPopulation.add(mutationMethod.mutate(c, rg, mutationStyle));
             }
 
             /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
-            List<Character> auxPop = selectorMethod1.select(currentPopulation,(int) Math.ceil(populationSize*rg.a));
-            auxPop.addAll(selectorMethod2.select(currentPopulation,(int) Math.floor(populationSize*(1-rg.a))));
-            currentPopulation = auxPop;
+            betterPerformanceChildren = selectorMethod1.select(mutatedPopulation,(int) Math.ceil(populationSize*rg.a));
+            betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,(int) Math.floor(populationSize*(1-rg.a))));
 
             /* Incrementamos el numero de generacion */
             rg.incrementGenerationNumber();
+
+            /* Seleccionamos la siguiente generacion */
+            currentPopulation = implementationMethod.selectNextGeneration(currentPopulation, betterPerformanceChildren, populationSize);
 
             /* Calculamos la mejor performance */
             rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
@@ -379,6 +385,7 @@ public class RoleGameImpl implements RoleGame {
 
     private void printPopulation(List<Character> population, String s){
         System.out.println(s);
+        population.sort(Comparator.comparingDouble(Character::getPerformance));
         for(Character c : population){
             c.printCharacter();
         }
