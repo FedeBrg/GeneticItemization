@@ -25,7 +25,9 @@ import utilities.Parser;
 import equipment.Equipment;
 import character.CharacterImpl;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -255,7 +257,7 @@ public class RoleGameImpl implements RoleGame {
         else if(criteriaMethod.getClass() == ContentCriteria.class){
             rg.bestPerformance = 0;
             rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
-            rg.tolerance = Integer.parseInt(prop.getProperty("tolerance"));
+            rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
         }
 
         rg.a = Double.parseDouble(prop.getProperty("a"));
@@ -269,6 +271,7 @@ public class RoleGameImpl implements RoleGame {
         List<Character> betterPerformanceChildren;
         Map.Entry<Character, Character> recombinedCharacters;
         boolean stopCondition = false;
+        StringBuilder toAppend = new StringBuilder();
         int ceilSize = (int) Math.ceil(populationSize * rg.a);
 
         /* Iniciamos el criterio de corte (solo por si es necesario) */
@@ -280,6 +283,7 @@ public class RoleGameImpl implements RoleGame {
 
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
+            toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getBestPerformance()));
             recombinedPopulation = new ArrayList<>();
             mutatedPopulation = new ArrayList<>();
 
@@ -307,6 +311,8 @@ public class RoleGameImpl implements RoleGame {
             betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,populationSize-ceilSize));
             //rg.printPopulation(betterPerformanceChildren,String.format("*******************************************\nCurrent gen %d\n",rg.currentGeneration));
 
+            //rg.printPopulation(betterPerformanceChildren, "###################\n");
+
             /* Incrementamos el numero de generacion */
             rg.incrementGenerationNumber();
 
@@ -321,9 +327,11 @@ public class RoleGameImpl implements RoleGame {
 
             /* Vemos si ya es hora de cortar */
             stopCondition = criteriaMethod.check(rg);
+
         }
 
         rg.printPopulation(currentPopulation, "FINAL\n");
+        rg.writeToFile("ranking2", toAppend);
     }
 
     private double calculateCurrentGenerationPerformance(List<Character> population) {
@@ -483,7 +491,6 @@ public class RoleGameImpl implements RoleGame {
                 return new UniversalSelection();
 
             case 4:
-
                 return new BoltzmannSelection(Double.parseDouble(prop.getProperty("initialTemperature")));
 
             case 5:
@@ -537,5 +544,14 @@ public class RoleGameImpl implements RoleGame {
 
     }
 
+    private void writeToFile(String filename, StringBuilder toAppend){
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename, true));
+            out.write(toAppend.toString());
+            out.close();
+        }
+
+        catch (IOException ignored) {}
+    }
 
 }

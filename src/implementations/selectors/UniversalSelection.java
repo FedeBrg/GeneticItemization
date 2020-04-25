@@ -12,6 +12,7 @@ public class UniversalSelection implements Selector {
 
     @Override
     public List<Character> select(List<Character> population, int limit) {
+        this.j = 0;
 
         /* Las cosas que necesitamos */
         double randomNumber, accumulatedPerformance, totalPerformance = getTotalPerformance(population);

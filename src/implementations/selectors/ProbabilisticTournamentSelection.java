@@ -13,6 +13,10 @@ public class ProbabilisticTournamentSelection implements Selector {
     @Override
     public List<Character> select(List<Character> population, int limit) {
 
+        if(limit == 0){
+            return new ArrayList<>();
+        }
+
         /* Ingredientes */
         double random, threshold;
         boolean betterPick;
