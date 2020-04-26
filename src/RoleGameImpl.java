@@ -179,12 +179,6 @@ public class RoleGameImpl implements RoleGame {
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
-//        weaponsTree = new TreeSet<>(weapons);
-//        bootsTree = new TreeSet<>(boots);
-//        helmetsTree = new TreeSet<>(helmets);
-//        glovesTree = new TreeSet<>(gloves);
-//        chestplatesTree = new TreeSet<>(chestplates);
-
         /* Probability */
         pm = 0.3;
 
