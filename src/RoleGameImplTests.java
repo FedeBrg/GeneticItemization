@@ -26,7 +26,6 @@ import equipment.Equipment;
 import character.CharacterImpl;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -179,6 +178,12 @@ public class RoleGameImplTests implements RoleGame {
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
+        weaponsTree = new TreeSet<Equipment>(weapons);
+        bootsTree = new TreeSet<Equipment>(boots);
+        helmetsTree = new TreeSet<Equipment>(helmets);
+        glovesTree = new TreeSet<Equipment>(gloves);
+        chestplatesTree = new TreeSet<Equipment>(chestplates);
+
         /* Probability */
         pm = 0.3;
 
@@ -227,6 +232,7 @@ public class RoleGameImplTests implements RoleGame {
         double toleranceP = 0.3;
         int initialTemperatureP = 100;
 
+
         /* Iniciamos lo que necesitamos*/
         RoleGameImplTests rg = new RoleGameImplTests();
 
@@ -236,115 +242,112 @@ public class RoleGameImplTests implements RoleGame {
                     for (selection1P = 1;selection1P<=7;selection1P++){
                         for(replacement1P = 1;replacement1P<=7;replacement1P++){
                             for (implementationP = 1;implementationP<=2;implementationP++){
+                                for(mutationStyleP = 1;mutationStyleP<=2;mutationStyleP++) {
 
-        String filename = String.format("c%dc%dm%ds%dr%di%d",characterClassP,crossoverP,mutationP,selection1P,replacement1P,implementationP);
-                                System.out.println(filename);
-        Class characterClass = rg.getClass(characterClassP);
-        Crossover crossoverMethod = rg.getCrossover(crossoverP);
-        Mutation mutationMethod = rg.getMutation(mutationP);
-        MutationStyle mutationStyle = rg.getMutationStyle(mutationStyleP);
+                                    String filename = String.format("c%dc%dm%ds%dr%di%dms%d", characterClassP, crossoverP, mutationP, selection1P, replacement1P, implementationP,mutationStyleP);
+                                    System.out.println(filename);
+                                    Class characterClass = rg.getClass(characterClassP);
+                                    Crossover crossoverMethod = rg.getCrossover(crossoverP);
+                                    Mutation mutationMethod = rg.getMutation(mutationP);
+                                    MutationStyle mutationStyle = rg.getMutationStyle(mutationStyleP);
 
-        Selector selectorMethod1 = rg.getSelection(selection1P,initialTemperatureP);
-        Selector selectorMethod2 = rg.getSelection(selection2P,initialTemperatureP);
+                                    Selector selectorMethod1 = rg.getSelection(selection1P, initialTemperatureP);
+                                    Selector selectorMethod2 = rg.getSelection(selection2P, initialTemperatureP);
 
-        Selector replacementMethod1 = rg.getSelection(replacement1P,initialTemperatureP);
-        Selector replacementMethod2 = rg.getSelection(replacement2P,initialTemperatureP);
+                                    Selector replacementMethod1 = rg.getSelection(replacement1P, initialTemperatureP);
+                                    Selector replacementMethod2 = rg.getSelection(replacement2P, initialTemperatureP);
 
-        Implementation implementationMethod = rg.getImplementation(implementationP);
+                                    Implementation implementationMethod = rg.getImplementation(implementationP);
 
-        Criteria criteriaMethod = rg.getCriteria(endCriteriaP);
+                                    Criteria criteriaMethod = rg.getCriteria(endCriteriaP);
 
-        if(criteriaMethod.getClass() == TimeCriteria.class){
-            rg.stopTime = stopTimeP;
-        }
-        else if(criteriaMethod.getClass() == GenerationQuantityCriteria.class){
-            rg.currentGeneration = 0;
-            rg.maxGeneration = maxGenerationP;
-        }
-        else if(criteriaMethod.getClass() == AcceptableSolutionCriteria.class){
-            rg.targetPopulationPerformance = targetPopulationPerformanceP;
-        }
-        else if(criteriaMethod.getClass() == StructCriteria.class){
-            rg.currentGenerationPerformance = 0;
-            rg.generationsNotChanging = generationsNotChangingP;
-            rg.tolerance = toleranceP;
-        }
-        else if(criteriaMethod.getClass() == ContentCriteria.class){
-            rg.bestPerformance = 0;
-            rg.generationsNotChanging = generationsNotChangingP;
-            rg.tolerance = toleranceP;
-        }
+                                    if (criteriaMethod.getClass() == TimeCriteria.class) {
+                                        rg.stopTime = stopTimeP;
+                                    } else if (criteriaMethod.getClass() == GenerationQuantityCriteria.class) {
+                                        rg.currentGeneration = 0;
+                                        rg.maxGeneration = maxGenerationP;
+                                    } else if (criteriaMethod.getClass() == AcceptableSolutionCriteria.class) {
+                                        rg.targetPopulationPerformance = targetPopulationPerformanceP;
+                                    } else if (criteriaMethod.getClass() == StructCriteria.class) {
+                                        rg.currentGenerationPerformance = 0;
+                                        rg.generationsNotChanging = generationsNotChangingP;
+                                        rg.tolerance = toleranceP;
+                                    } else if (criteriaMethod.getClass() == ContentCriteria.class) {
+                                        rg.bestPerformance = 0;
+                                        rg.generationsNotChanging = generationsNotChangingP;
+                                        rg.tolerance = toleranceP;
+                                    }
 
-        rg.a = aP;
-        rg.b = bP;
-        rg.pm = mutationProbabilityP;
+                                    rg.a = aP;
+                                    rg.b = bP;
+                                    rg.pm = mutationProbabilityP;
 
-        int populationSize = populationSizeP;
-        List<Character> currentPopulation = rg.randomGeneration(characterClass,populationSize);
-        List<Character> recombinedPopulation;
-        List<Character> mutatedPopulation;
-        List<Character> betterPerformanceChildren;
-        Map.Entry<Character, Character> recombinedCharacters;
-        boolean stopCondition = false;
-        StringBuilder toAppend = new StringBuilder();
-        int ceilSize = (int) Math.ceil(populationSize * rg.a);
+                                    int populationSize = populationSizeP;
+                                    List<Character> currentPopulation = rg.randomGeneration(characterClass, populationSize);
+                                    List<Character> recombinedPopulation;
+                                    List<Character> mutatedPopulation;
+                                    List<Character> betterPerformanceChildren;
+                                    Map.Entry<Character, Character> recombinedCharacters;
+                                    boolean stopCondition = false;
+                                    StringBuilder toAppend = new StringBuilder();
+                                    int ceilSize = (int) Math.ceil(populationSize * rg.a);
 
-        /* Iniciamos el criterio de corte (solo por si es necesario) */
-        rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
-        rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
-        criteriaMethod.start();
+                                    /* Iniciamos el criterio de corte (solo por si es necesario) */
+                                    rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
+                                    rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
+                                    criteriaMethod.start();
 
 
-        /* Se haran las iteraciones necesarias segun el criterio de corte */
-        while(!stopCondition){
-            toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getCurrentGenerationPerformance()));
-            recombinedPopulation = new ArrayList<>();
-            mutatedPopulation = new ArrayList<>();
+                                    /* Se haran las iteraciones necesarias segun el criterio de corte */
+                                    while (!stopCondition) {
+                                        toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getCurrentGenerationPerformance()));
+                                        recombinedPopulation = new ArrayList<>();
+                                        mutatedPopulation = new ArrayList<>();
 
-            /* Se recombinan los padres y se agregan sus hijos a la poblacion */
-            Collections.shuffle(currentPopulation);
-            for(int k = 0; k < populationSize - 1; k += 2){
-                recombinedCharacters = crossoverMethod.cross(currentPopulation.get(k), currentPopulation.get(k+1));
-                recombinedPopulation.add(recombinedCharacters.getValue());
-                recombinedPopulation.add(recombinedCharacters.getKey());
-            }
+                                        /* Se recombinan los padres y se agregan sus hijos a la poblacion */
+                                        Collections.shuffle(currentPopulation);
+                                        for (int k = 0; k < populationSize - 1; k += 2) {
+                                            recombinedCharacters = crossoverMethod.cross(currentPopulation.get(k), currentPopulation.get(k + 1));
+                                            recombinedPopulation.add(recombinedCharacters.getValue());
+                                            recombinedPopulation.add(recombinedCharacters.getKey());
+                                        }
 
-            /* Si size es impar el ultimo se agrega */
-            if(populationSize % 2 != 0){
-                recombinedPopulation.add(currentPopulation.get(populationSize-1));
-            }
+                                        /* Si size es impar el ultimo se agrega */
+                                        if (populationSize % 2 != 0) {
+                                            recombinedPopulation.add(currentPopulation.get(populationSize - 1));
+                                        }
 
-            /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
-            for(Character c : recombinedPopulation){
-                mutatedPopulation.add(mutationMethod.mutate(c, rg, mutationStyle));
-            }
+                                        /* Luego se mutan los genes en los hijos y se los agrega a la poblacion */
+                                        for (Character c : recombinedPopulation) {
+                                            mutatedPopulation.add(mutationMethod.mutate(c, rg, mutationStyle));
+                                        }
 
-            /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
+                                        /* Ahora que tenemos una poblacion de tamaño 2 * K debemos seleccionar los K mas aptos */
 
-            betterPerformanceChildren = selectorMethod1.select(mutatedPopulation, ceilSize);
-            betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation,populationSize-ceilSize));
-            //rg.printPopulation(betterPerformanceChildren,String.format("*******************************************\nCurrent gen %d\n",rg.currentGeneration));
+                                        betterPerformanceChildren = selectorMethod1.select(mutatedPopulation, ceilSize);
+                                        betterPerformanceChildren.addAll(selectorMethod2.select(mutatedPopulation, populationSize - ceilSize));
+                                        //rg.printPopulation(betterPerformanceChildren,String.format("*******************************************\nCurrent gen %d\n",rg.currentGeneration));
 
-            //rg.printPopulation(betterPerformanceChildren, "###################\n");
+                                        //rg.printPopulation(betterPerformanceChildren, "###################\n");
 
-            /* Incrementamos el numero de generacion */
-            rg.incrementGenerationNumber();
+                                        /* Incrementamos el numero de generacion */
+                                        rg.incrementGenerationNumber();
 
-            /* Seleccionamos la siguiente generacion */
-            currentPopulation = implementationMethod.selectNextGeneration(currentPopulation, betterPerformanceChildren, populationSize, replacementMethod1, replacementMethod2, rg.b);
+                                        /* Seleccionamos la siguiente generacion */
+                                        currentPopulation = implementationMethod.selectNextGeneration(currentPopulation, betterPerformanceChildren, populationSize, replacementMethod1, replacementMethod2, rg.b);
 
-            /* Calculamos la mejor performance */
-            rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
+                                        /* Calculamos la mejor performance */
+                                        rg.setBestPerformance(rg.calculateBestPerformance(currentPopulation));
 
-            /* Seteamos la performance actual (Struct criteria) */
-            rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
+                                        /* Seteamos la performance actual (Struct criteria) */
+                                        rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
 
-            /* Vemos si ya es hora de cortar */
-            stopCondition = criteriaMethod.check(rg);
-        }
+                                        /* Vemos si ya es hora de cortar */
+                                        stopCondition = criteriaMethod.check(rg);
+                                    }
 
-        rg.writeToFile(filename, toAppend);
-
+                                    rg.writeToFile(filename, toAppend);
+                                }
                             }
                         }
                     }

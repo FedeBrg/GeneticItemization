@@ -41,7 +41,6 @@ public class BoltzmannSelection implements Selector {
         }
 
         this.t = su.calculateNewTemperature(t);
-        System.out.println(t);
 
         /* Calculamos el promedio de las e^(f(t)/L) */
         avgValue = avgValue / newPerformancePopulation.size();
