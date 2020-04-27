@@ -179,11 +179,11 @@ public class RoleGameImpl implements RoleGame {
         gloves = p.parseEquipmentFile("guantes.tsv");
         chestplates = p.parseEquipmentFile("pecheras.tsv");
 
-        weaponsTree = new TreeSet<>(weapons);
-        bootsTree = new TreeSet<>(boots);
-        helmetsTree = new TreeSet<>(helmets);
-        glovesTree = new TreeSet<>(gloves);
-        chestplatesTree = new TreeSet<>(chestplates);
+        weaponsTree = new TreeSet<Equipment>(weapons);
+        bootsTree = new TreeSet<Equipment>(boots);
+        helmetsTree = new TreeSet<Equipment>(helmets);
+        glovesTree = new TreeSet<Equipment>(gloves);
+        chestplatesTree = new TreeSet<Equipment>(chestplates);
 
         /* Probability */
         pm = 0.3;
@@ -284,8 +284,8 @@ public class RoleGameImpl implements RoleGame {
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
             toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getCurrentGenerationPerformance()));
-            recombinedPopulation = new ArrayList<>();
-            mutatedPopulation = new ArrayList<>();
+            recombinedPopulation = new ArrayList<Character>();
+            mutatedPopulation = new ArrayList<Character>();
 
             /* Se recombinan los padres y se agregan sus hijos a la poblacion */
             Collections.shuffle(currentPopulation);
@@ -350,7 +350,7 @@ public class RoleGameImpl implements RoleGame {
     }
 
     private List<Character> randomGeneration(Class c, int size){
-        List<Character> characters = new ArrayList<>(size);
+        List<Character> characters = new ArrayList<Character>(size);
 
         Random r = new Random();
 
@@ -361,7 +361,7 @@ public class RoleGameImpl implements RoleGame {
         int cmax = chestplates.size();
 
         for (int i = 0; i < size; i++){
-            List<Equipment> equipment = new ArrayList<>(5);
+            List<Equipment> equipment = new ArrayList<Equipment>(5);
             equipment.add(weapons.get(r.nextInt(wmax)));
             equipment.add(boots.get(r.nextInt(bmax)));
             equipment.add(helmets.get(r.nextInt(hmax)));
