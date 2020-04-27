@@ -42,7 +42,7 @@ In the executables folder theres a .jar to run the project, make sure there is a
 ### selection2 ((1-a)% of the generated children will be selected with this method)
 Same as `selection1`
 
-### replacement1 (a% of the next generation will be selected with this method)
+### replacement1 (b% of the next generation will be selected with this method)
 - 1 - Elite Selection (default)
 - 2 - Roulette Selection
 - 3 - Universal Selection
@@ -51,7 +51,7 @@ Same as `selection1`
 - 6 - Probabilistic Tournaments Selection
 - 7 - Ranking Selection
 
-### replacement2 ((1-a)% of the next generation will be selected with this method)
+### replacement2 ((1-b)% of the next generation will be selected with this method)
 Same as `replacement1`
 
 ### implementation
@@ -75,7 +75,7 @@ Double value used in `replacement1` and `replacement2`
 Integer value which represents the population size
 
 ### mutationProbability
-Double value which represents the probability of a gen to being mutated
+Double value which represents the probability of a gen being mutated
 
 ### stopTime
 Integer value used in `Time Criteria` to set the finish time
@@ -84,13 +84,13 @@ Integer value used in `Time Criteria` to set the finish time
 Integer value used in `Generation Quantity Criteria` to set the desired quantity of generations
 
 ### targetPopulationPerformance
-Integer value used in `Acceptable Solution Criteria` to set the total population performance
+Integer value used in `Acceptable Solution Criteria` to set the total population performance goal
 
 ### generationsNotChanging
-Integer value used in `Struct Criteria` and `Content Criteria` to set the quantity of generations which all of them meet a certain condition (i.e. not increasing total population performance more than 1%) before the end criteria finishes the execution 
+Integer value used in `Struct Criteria` and `Content Criteria` to set how many consecutive  generations with a given value within `tolerance`'s range are to be found before completion. In `Struct Criteria` this value is the generation's total performance, in `Content Criteria` it's the generation's best performing individual.
 
 ### tolerance
-Double value used in `Struct Criteria` and `Content Criteria` to set maximium diference between some actual generation value and some previous generation value. In `Struct Criteria` this value is the total generation performance, in `Content Criteria` is the best individual performance of the generation.
+Double value used in `Struct Criteria` and `Content Criteria` coupled with `generationsNotChanging` to set maximium diference between the current generation and the previous one. 
 
 ### initialTemperature
 Double value used in `Boltzmann Selection` to set the initial temperature of the system
