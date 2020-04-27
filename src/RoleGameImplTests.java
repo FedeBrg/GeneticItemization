@@ -31,7 +31,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class RoleGameImpl implements RoleGame {
+public class RoleGameImplTests implements RoleGame {
 
     /* Listas de items */
     private final List<Equipment> weapons;
@@ -169,7 +169,7 @@ public class RoleGameImpl implements RoleGame {
         return targetPopulationPerformance;
     }
 
-    public RoleGameImpl() {
+    public RoleGameImplTests() {
         Parser p = new Parser();
 
         /* Items */
@@ -206,59 +206,80 @@ public class RoleGameImpl implements RoleGame {
     public static void main(String[] args){
 
         /* Leemos el archivo de input */
-        Properties prop = new Properties();
-        try {
-            FileInputStream fis = new FileInputStream("config.properties");
-            prop.load(fis);
-
-        } catch (IOException e) {
-            System.out.println("Can't open config file.\n");
-        }
+        int characterClassP = 1;
+        int crossoverP = 2;
+        int mutationP = 1;
+        int mutationStyleP = 1;
+        int selection1P = 1;
+        int selection2P = 1;
+        int replacement1P = 1;
+        int replacement2P = 1;
+        int implementationP = 1;
+        int endCriteriaP = 2;
+        double aP = 1;
+        double bP = 1;
+        int populationSizeP = 250;
+        double mutationProbabilityP = 0.5;
+        int stopTimeP = 15000;
+        int maxGenerationP = 500;
+        int targetPopulationPerformanceP = 350;
+        int generationsNotChangingP = 15;
+        double toleranceP = 0.3;
+        int initialTemperatureP = 100;
 
         /* Iniciamos lo que necesitamos*/
-        RoleGameImpl rg = new RoleGameImpl();
+        RoleGameImplTests rg = new RoleGameImplTests();
 
-        Class characterClass = rg.getClass(Integer.parseInt(prop.getProperty("characterClass")));
-        Crossover crossoverMethod = rg.getCrossover(Integer.parseInt(prop.getProperty("crossover")));
-        Mutation mutationMethod = rg.getMutation(Integer.parseInt(prop.getProperty("mutation")));
-        MutationStyle mutationStyle = rg.getMutationStyle(Integer.parseInt(prop.getProperty("mutationStyle")));
+        for(characterClassP = 1; characterClassP<=4;characterClassP++){
+            for(crossoverP = 1;crossoverP<=4;crossoverP++){
+                for (mutationP = 1; mutationP<=4;mutationP++){
+                    for (selection1P = 1;selection1P<=7;selection1P++){
+                        for(replacement1P = 1;replacement1P<=7;replacement1P++){
+                            for (implementationP = 1;implementationP<=2;implementationP++){
 
-        Selector selectorMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("selection1")),prop);
-        Selector selectorMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("selection2")),prop);
+        String filename = String.format("c%dc%dm%ds%dr%di%d",characterClassP,crossoverP,mutationP,selection1P,replacement1P,implementationP);
+                                System.out.println(filename);
+        Class characterClass = rg.getClass(characterClassP);
+        Crossover crossoverMethod = rg.getCrossover(crossoverP);
+        Mutation mutationMethod = rg.getMutation(mutationP);
+        MutationStyle mutationStyle = rg.getMutationStyle(mutationStyleP);
 
-        Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")), prop);
-        Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")), prop);
+        Selector selectorMethod1 = rg.getSelection(selection1P,initialTemperatureP);
+        Selector selectorMethod2 = rg.getSelection(selection2P,initialTemperatureP);
 
-        Implementation implementationMethod = rg.getImplementation(Integer.parseInt(prop.getProperty("implementation")));
+        Selector replacementMethod1 = rg.getSelection(replacement1P,initialTemperatureP);
+        Selector replacementMethod2 = rg.getSelection(replacement2P,initialTemperatureP);
 
-        Criteria criteriaMethod = rg.getCriteria(Integer.parseInt(prop.getProperty("endCriteria")));
+        Implementation implementationMethod = rg.getImplementation(implementationP);
+
+        Criteria criteriaMethod = rg.getCriteria(endCriteriaP);
 
         if(criteriaMethod.getClass() == TimeCriteria.class){
-            rg.stopTime = Integer.parseInt(prop.getProperty("stopTime"));
+            rg.stopTime = stopTimeP;
         }
         else if(criteriaMethod.getClass() == GenerationQuantityCriteria.class){
             rg.currentGeneration = 0;
-            rg.maxGeneration = Integer.parseInt(prop.getProperty("maxGeneration"));
+            rg.maxGeneration = maxGenerationP;
         }
         else if(criteriaMethod.getClass() == AcceptableSolutionCriteria.class){
-            rg.targetPopulationPerformance = Integer.parseInt(prop.getProperty("targetPopulationPerformance"));
+            rg.targetPopulationPerformance = targetPopulationPerformanceP;
         }
         else if(criteriaMethod.getClass() == StructCriteria.class){
             rg.currentGenerationPerformance = 0;
-            rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
-            rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
+            rg.generationsNotChanging = generationsNotChangingP;
+            rg.tolerance = toleranceP;
         }
         else if(criteriaMethod.getClass() == ContentCriteria.class){
             rg.bestPerformance = 0;
-            rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
-            rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
+            rg.generationsNotChanging = generationsNotChangingP;
+            rg.tolerance = toleranceP;
         }
 
-        rg.a = Double.parseDouble(prop.getProperty("a"));
-        rg.b = Double.parseDouble(prop.getProperty("b"));
-        rg.pm = Double.parseDouble(prop.getProperty("mutationProbability"));
+        rg.a = aP;
+        rg.b = bP;
+        rg.pm = mutationProbabilityP;
 
-        int populationSize = Integer.parseInt(prop.getProperty("populationSize"));
+        int populationSize = populationSizeP;
         List<Character> currentPopulation = rg.randomGeneration(characterClass,populationSize);
         List<Character> recombinedPopulation;
         List<Character> mutatedPopulation;
@@ -273,7 +294,6 @@ public class RoleGameImpl implements RoleGame {
         rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
         criteriaMethod.start();
 
-        rg.printPopulation(currentPopulation, "INITIAL\n");
 
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
@@ -323,8 +343,14 @@ public class RoleGameImpl implements RoleGame {
             stopCondition = criteriaMethod.check(rg);
         }
 
-        rg.printPopulation(currentPopulation, "FINAL\n");
-        rg.writeToFile("crossover2", toAppend);
+        rg.writeToFile(filename, toAppend);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private double calculateCurrentGenerationPerformance(List<Character> population) {
@@ -471,7 +497,7 @@ public class RoleGameImpl implements RoleGame {
 
     }
 
-    private Selector getSelection(int arg, Properties prop){
+    private Selector getSelection(int arg, double initialTemp){
         switch (arg){
             case 1:
                 return new EliteSelection();
@@ -483,7 +509,7 @@ public class RoleGameImpl implements RoleGame {
                 return new UniversalSelection();
 
             case 4:
-                return new BoltzmannSelection(Double.parseDouble(prop.getProperty("initialTemperature")));
+                return new BoltzmannSelection(initialTemp);
 
             case 5:
                 return new DeterministicTournamentSelection();
