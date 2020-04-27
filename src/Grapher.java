@@ -19,8 +19,6 @@ import implementations.selectors.*;
 import interfaces.*;
 import interfaces.Class;
 import org.knowm.xchart.*;
-import org.knowm.xchart.internal.series.Series;
-import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -156,7 +154,7 @@ public class Grapher {
 
 
     private CSVImporter.SeriesData readCSV(String filename, String seriesName) throws IOException {
-        BufferedReader csvReader = new BufferedReader(new FileReader(filename));
+        BufferedReader csvReader = new BufferedReader(new FileReader("src/files/" + filename));
         String row;
         List<Number> xdata = new ArrayList<>();
         List<Number> ydata = new ArrayList<>();
