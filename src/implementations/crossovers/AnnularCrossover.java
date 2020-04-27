@@ -30,8 +30,6 @@ public class AnnularCrossover implements Crossover {
         int length = r.nextInt(4);
         int i = crossPoint;
 
-        System.out.printf("%d %d\n",crossPoint,length);
-
         while(length>0){
             if(i == 5){
                 mutated1.setHeight(c2.getHeight());

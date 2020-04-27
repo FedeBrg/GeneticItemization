@@ -183,7 +183,7 @@ public class RoleGameImpl implements RoleGame {
         pm = 0.3;
 
         /* Time criteria */
-        stopTime = 5000;
+        stopTime = 30000;
 
         /* Generations criteria */
         currentGeneration = 0;
@@ -246,7 +246,7 @@ public class RoleGameImpl implements RoleGame {
         else if(criteriaMethod.getClass() == StructCriteria.class){
             rg.currentGenerationPerformance = 0;
             rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
-            rg.tolerance = Integer.parseInt(prop.getProperty("tolerance"));
+            rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
         }
         else if(criteriaMethod.getClass() == ContentCriteria.class){
             rg.bestPerformance = 0;
@@ -277,7 +277,7 @@ public class RoleGameImpl implements RoleGame {
 
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
-            toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getBestPerformance()));
+            toAppend.append(String.format("%d,%f\n", rg.getCurrentGeneration(), rg.getCurrentGenerationPerformance()));
             recombinedPopulation = new ArrayList<>();
             mutatedPopulation = new ArrayList<>();
 
@@ -321,11 +321,10 @@ public class RoleGameImpl implements RoleGame {
 
             /* Vemos si ya es hora de cortar */
             stopCondition = criteriaMethod.check(rg);
-
         }
 
         rg.printPopulation(currentPopulation, "FINAL\n");
-        rg.writeToFile("ranking2", toAppend);
+        rg.writeToFile("mutation1", toAppend);
     }
 
     private double calculateCurrentGenerationPerformance(List<Character> population) {
@@ -397,7 +396,6 @@ public class RoleGameImpl implements RoleGame {
             c.printCharacter();
         }
     }
-
 
     private Class getClass(int arg){
         switch (arg){

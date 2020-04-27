@@ -22,6 +22,11 @@ public class StructCriteria implements Criteria {
 
     @Override
     public boolean check(RoleGame rg) {
+        if(rg.getCurrentGeneration() == 1){
+            lastGenerationPerformance = rg.getCurrentGenerationPerformance();
+            return false;
+        }
+
         if(Math.abs(rg.getCurrentGenerationPerformance() - lastGenerationPerformance) < rg.getTolerance()){
             generationsNotChanging++;
         }
