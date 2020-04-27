@@ -1,4 +1,5 @@
 # Genetic Itemization
+Genetic algorithm based role-game itemizer. Instituto Tecnológico de Buenos Aires. Q1-2020
 ## How to run
 ### Clone into IDE
 As simple as that, keep the file structure as is and you should have no problem
@@ -50,7 +51,7 @@ Same as `selection1`
 - 6 - Probabilistic Tournaments Selection
 - 7 - Ranking Selection
 
-### selection2 ((1-a)% of the next generation will be selected with this method)
+### replacement2 ((1-a)% of the next generation will be selected with this method)
 Same as `replacement1`
 
 ### implementation
