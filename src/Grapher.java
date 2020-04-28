@@ -134,6 +134,9 @@ public class Grapher {
         for (String value : map.values()){
             System.out.println(value);
         }
+        System.out.println("Population size: 250");
+        System.out.println("Max. generation: 500");
+        System.out.println("Mutation probability: 0.5");
 
         XYChartBuilder xyChartBuilder = new XYChartBuilder();
         xyChartBuilder.xAxisTitle("Generation");

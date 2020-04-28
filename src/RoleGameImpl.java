@@ -225,46 +225,67 @@ public class RoleGameImpl implements RoleGame {
         RoleGameImpl rg = new RoleGameImpl();
 
         Class characterClass = rg.getClass(Integer.parseInt(prop.getProperty("characterClass")));
+        System.out.println("Character class: "+characterClass);
         Crossover crossoverMethod = rg.getCrossover(Integer.parseInt(prop.getProperty("crossover")));
+        System.out.println("Crossover method: "+crossoverMethod);
         Mutation mutationMethod = rg.getMutation(Integer.parseInt(prop.getProperty("mutation")));
+        System.out.println("Mutation method: "+mutationMethod);
         MutationStyle mutationStyle = rg.getMutationStyle(Integer.parseInt(prop.getProperty("mutationStyle")));
-
+        System.out.println("Mutation style: "+mutationStyle);
         Selector selectorMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("selection1")),prop);
+        System.out.println("Selector methdo 1: "+selectorMethod1);
         Selector selectorMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("selection2")),prop);
-
+        System.out.println("Selector method 2:"+selectorMethod2);
         Selector replacementMethod1 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement1")), prop);
+        System.out.println("Replacement method 1: " + replacementMethod1);
         Selector replacementMethod2 = rg.getSelection(Integer.parseInt(prop.getProperty("replacement2")), prop);
+        System.out.println("Replacement method 2: "+replacementMethod2);
 
         Implementation implementationMethod = rg.getImplementation(Integer.parseInt(prop.getProperty("implementation")));
-
+        System.out.println("Implementation method: "+implementationMethod);
         Criteria criteriaMethod = rg.getCriteria(Integer.parseInt(prop.getProperty("endCriteria")));
+        System.out.println("End criteria: "+criteriaMethod);
 
         if(criteriaMethod.getClass() == TimeCriteria.class){
             rg.stopTime = Integer.parseInt(prop.getProperty("stopTime"));
+            System.out.println("Stop time: "+rg.stopTime);
         }
         else if(criteriaMethod.getClass() == GenerationQuantityCriteria.class){
             rg.currentGeneration = 0;
             rg.maxGeneration = Integer.parseInt(prop.getProperty("maxGeneration"));
+            System.out.println("Max generation: "+rg.maxGeneration);
         }
         else if(criteriaMethod.getClass() == AcceptableSolutionCriteria.class){
             rg.targetPopulationPerformance = Integer.parseInt(prop.getProperty("targetPopulationPerformance"));
+            System.out.println("Target population performance: "+rg.targetPopulationPerformance);
         }
         else if(criteriaMethod.getClass() == StructCriteria.class){
             rg.currentGenerationPerformance = 0;
             rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
             rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
+
+            System.out.println("Generations not changing: "+rg.generationsNotChanging);
+            System.out.println("Tolerance: "+rg.tolerance);
         }
         else if(criteriaMethod.getClass() == ContentCriteria.class){
             rg.bestPerformance = 0;
             rg.generationsNotChanging = Integer.parseInt(prop.getProperty("generationsNotChanging"));
             rg.tolerance = Double.parseDouble(prop.getProperty("tolerance"));
+
+            System.out.println("Generations not changing: "+rg.generationsNotChanging);
+            System.out.println("Tolerance: "+rg.tolerance);
         }
 
         rg.a = Double.parseDouble(prop.getProperty("a"));
         rg.b = Double.parseDouble(prop.getProperty("b"));
         rg.pm = Double.parseDouble(prop.getProperty("mutationProbability"));
 
+        System.out.println("a: "+rg.a );
+        System.out.println("b: "+rg.b );
+        System.out.println("Mutation probability: "+rg.pm);
+
         int populationSize = Integer.parseInt(prop.getProperty("populationSize"));
+        System.out.println("Population size: "+populationSize);
         List<Character> currentPopulation = rg.randomGeneration(characterClass,populationSize);
         List<Character> recombinedPopulation;
         List<Character> mutatedPopulation;
@@ -279,7 +300,7 @@ public class RoleGameImpl implements RoleGame {
         rg.setCurrentGenerationPerformance(rg.calculateCurrentGenerationPerformance(currentPopulation));
         criteriaMethod.start();
 
-        rg.printPopulation(currentPopulation, "INITIAL\n");
+//        rg.printPopulation(currentPopulation, "INITIAL\n");
 
         /* Se haran las iteraciones necesarias segun el criterio de corte */
         while(!stopCondition){
@@ -329,8 +350,16 @@ public class RoleGameImpl implements RoleGame {
             stopCondition = criteriaMethod.check(rg);
         }
 
-        rg.printPopulation(currentPopulation, "FINAL\n");
-        rg.writeToFile("crossover2", toAppend);
+        currentPopulation.sort(Comparator.comparingDouble(Character::getPerformance));
+
+        Character best = currentPopulation.get(currentPopulation.size()-1);
+        System.out.println("------------------------------------------------------------------------------------");
+        System.out.println("Best performing individual:");
+        best.printCharacter();
+
+
+//        rg.printPopulation(currentPopulation, "FINAL\n");
+//        rg.writeToFile("crossover2", toAppend);
     }
 
     private double calculateCurrentGenerationPerformance(List<Character> population) {
