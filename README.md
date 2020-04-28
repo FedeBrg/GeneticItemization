@@ -7,9 +7,9 @@ As simple as that, keep the file structure as is and you should have no problem
 In the root folder theres a .jar to run the project, make sure there is a valid properties file named "config.properties" at the same level as the .jar. The equipment files ("armas.tsv", "botas.tsv", "cascos.tsv", "guantes.tsv", "pecheras.tsv") must be at the same level too. To execute just run:
 `java -jar GeneticItemization.jar`
 
-In order to generate charts, all provided files in our project (now located in src/files) must be in src/files while the .jar must be at the same level as 'src' folder. To execute just run:
+In order to generate charts, all provided files in our project (now located in 'src/files') must be in 'src/files' while the .jar must be at the same level as 'src' folder. To execute just run:
 `java -jar Grapher.jar`
-And follow the instructions.
+and follow the instructions.
 
 ## Config file options
 ### characterClass
